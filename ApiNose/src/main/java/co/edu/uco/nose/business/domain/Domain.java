@@ -19,4 +19,5 @@ class Domain {
 	public void setId(UUID id) {
 		this.id = UUIDHelper.getUUIDHelper().getDefault(id);
 	}
+
 }
