@@ -39,7 +39,7 @@ public class UserDomain extends Domain {
 	public UserDomain(final UUID id) {
 		super(id);
 		setIdentificationType(IdentificationTypeDomain.getDefaultValue());
-		setIdentificationNumber(TextHelper.getDefault());;
+		setIdentificationNumber(TextHelper.getDefault());
 		setFirstName(TextHelper.getDefault());
 		setMiddleName(TextHelper.getDefault());
 		setLastName(TextHelper.getDefault());
@@ -74,7 +74,7 @@ public class UserDomain extends Domain {
 	}
 	
 	static UserDomain getDefaultValue(final UserDomain user) {
-		return ObjectHelper.getDefault(getDefaultValue(), user);
+		return ObjectHelper.getDefault(user, getDefaultValue());
 	}
 
 	public IdentificationTypeDomain getIdentificationType() {
@@ -82,7 +82,7 @@ public class UserDomain extends Domain {
 	}
 	
 	public void setIdentificationType(final IdentificationTypeDomain identificationType) {
-		this.identificationType = ObjectHelper.getDefault(IdentificationTypeDomain.getDefaultValue(), identificationType);
+		this.identificationType = ObjectHelper.getDefault(identificationType, IdentificationTypeDomain.getDefaultValue());
 	}
 	
 	public String getIdentificationNumber() {
@@ -130,7 +130,7 @@ public class UserDomain extends Domain {
 	}
 	
 	public void setResidenceCity(final CityDomain residenceCity) {
-		this.residenceCity = ObjectHelper.getDefault(CityDomain.getDefaultValue(), residenceCity);
+		this.residenceCity = ObjectHelper.getDefault(residenceCity, CityDomain.getDefaultValue());
 	}
 	
 	public String getEmail() {

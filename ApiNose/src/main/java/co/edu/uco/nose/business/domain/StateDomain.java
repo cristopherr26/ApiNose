@@ -34,7 +34,7 @@ public class StateDomain extends Domain {
 	}
 	
 	static StateDomain getDefaultValue(final StateDomain state) {
-		return ObjectHelper.getDefault(getDefaultValue(), state);
+		return ObjectHelper.getDefault(state, getDefaultValue());
 	}
 
 	public String getName() {
@@ -50,7 +50,7 @@ public class StateDomain extends Domain {
 	}
 
 	public void setCountry(final CountryDomain country) {
-		this.country = ObjectHelper.getDefault(CountryDomain.getDefaultValue(), country);
+		this.country = ObjectHelper.getDefault(country, CountryDomain.getDefaultValue());
 	}
 
 	
