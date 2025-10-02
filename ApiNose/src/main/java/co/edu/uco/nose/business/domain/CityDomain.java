@@ -2,30 +2,39 @@ package co.edu.uco.nose.business.domain;
 
 import java.util.UUID;
 
+import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helper.TextHelper;
 import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 
 public class CityDomain extends Domain{
 	
 	private String name;
-	private UUID stateId;
+	private StateDomain state;
 	
 	public CityDomain() {
 		super(UUIDHelper.getUUIDHelper().getDefault());
 		setName(TextHelper.getDefault());
-		setStateId(UUIDHelper.getUUIDHelper().getDefault());
+		setState(StateDomain.getDefaultValue());
 	}
 	
 	public CityDomain(final UUID id) {
 		super(id);
 		setName(TextHelper.getDefault());
-		setStateId(UUIDHelper.getUUIDHelper().getDefault());
+		setState(StateDomain.getDefaultValue());
 	}
 	
-	public CityDomain(final UUID id, final String name, final UUID stateId) {
+	public CityDomain(final UUID id, final String name, final StateDomain state) {
 		super(id);
 		this.name = name;
-		this.stateId = stateId;
+		this.state = state;
+	}
+	
+	static CityDomain getDefaultValue() {
+		return new CityDomain();
+	}
+	
+	static CityDomain getDefaultValue(final CityDomain city) {
+		return ObjectHelper.getDefault(getDefaultValue(), city);
 	}
 
 	public String getName() {
@@ -36,12 +45,12 @@ public class CityDomain extends Domain{
 		this.name = TextHelper.getDefaultWithTrim(name);
 	}
 	
-	public UUID getStateId() {
-		return stateId;
+	public StateDomain getState() {
+		return state;
 	}
 	
-	public void setStateId(final UUID stateId) {
-		this.stateId = UUIDHelper.getUUIDHelper().getDefault(stateId);
+	public void setState(final StateDomain state) {
+		this.state = ObjectHelper.getDefault(StateDomain.getDefaultValue(), state);
 	}
 	
 
