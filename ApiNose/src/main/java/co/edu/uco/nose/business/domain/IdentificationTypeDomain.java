@@ -6,7 +6,7 @@ import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helper.TextHelper;
 import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 
-public class IdentificationTypeDomain extends Domain {
+public final class IdentificationTypeDomain extends Domain {
 	
 	private String name;
 	
