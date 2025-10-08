@@ -8,9 +8,9 @@ import co.edu.uco.nose.data.dao.entity.CityDAO;
 import co.edu.uco.nose.data.dao.entity.SqlConnection;
 import co.edu.uco.nose.entity.CityEntity;
 
-public final class CitySqlServerDAO extends SqlConnection implements CityDAO {
+public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 
-	protected CitySqlServerDAO(Connection connection) {
+	protected CityPostgreSqlDAO(Connection connection) {
 		super(connection);
 	}
 

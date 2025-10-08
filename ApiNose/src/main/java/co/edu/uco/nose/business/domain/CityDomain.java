@@ -25,8 +25,8 @@ public final class CityDomain extends Domain{
 	
 	public CityDomain(final UUID id, final String name, final StateDomain state) {
 		super(id);
-		this.name = name;
-		this.state = state;
+		setName(name);
+		setState(state);
 	}
 	
 	static CityDomain getDefaultValue() {

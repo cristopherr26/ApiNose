@@ -25,8 +25,8 @@ public final class StateDomain extends Domain {
 	
 	public StateDomain(final UUID id, final String name, final CountryDomain country) {
 		super(id);
-		this.name = name;
-		this.country = country;
+		setName(name);
+		setCountry(country);
 	}
 	
 	static StateDomain getDefaultValue() {

@@ -56,17 +56,17 @@ public final class UserDomain extends Domain {
 			final String middleName, final String lastName, final String secondLastName, final CityDomain residenceCity, final String email,
 			final String cellPhoneNumber, final boolean emailConfirmed, final boolean cellPhoneNumberConfirmed) {
 		super(id);
-		this.identificationType = identificationType;
-		this.identificationNumber = identificationNumber;
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
-		this.secondLastName = secondLastName;
-		this.residenceCity = residenceCity;
-		this.email = email;
-		this.cellPhoneNumber = cellPhoneNumber;
-		this.emailConfirmed = emailConfirmed;
-		this.cellPhoneNumberConfirmed = cellPhoneNumberConfirmed;
+		setIdentificationType(identificationType);
+		setIdentificationNumber(identificationNumber);
+		setFirstName(firstName);
+		setMiddleName(middleName);
+		setLastName(secondLastName);
+		setSecondLastName(secondLastName);
+		setResidenceCity(residenceCity);
+		setEmail(email);
+		setCellPhoneNumber(cellPhoneNumber);
+		setEmailConfirmed(emailConfirmed);
+		setCellPhoneNumberConfirmed(cellPhoneNumberConfirmed);
 	}
 	
 	static UserDomain getDefaultValue() {

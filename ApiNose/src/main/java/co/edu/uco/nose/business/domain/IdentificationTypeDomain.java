@@ -23,7 +23,7 @@ public final class IdentificationTypeDomain extends Domain {
 
 	public IdentificationTypeDomain(final UUID id, final String name) {
 		super(id);
-		this.name = name;
+		setName(name);
 	}
 	
 	static IdentificationTypeDomain getDefaultValue() {
