@@ -10,7 +10,7 @@ import co.edu.uco.nose.entity.CountryEntity;
 
 public final class CountryPostgreSqlDAO extends SqlConnection implements CountryDAO {
 
-	protected CountryPostgreSqlDAO(Connection connection) {
+	public CountryPostgreSqlDAO(Connection connection) {
 		super(connection);
 	}
 

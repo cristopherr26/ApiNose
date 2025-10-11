@@ -10,7 +10,7 @@ import co.edu.uco.nose.entity.IdentificationTypeEntity;
 
 public final class IdentificationTypePostgreSqlDAO extends SqlConnection implements IdentificationTypeDAO {
 
-	protected IdentificationTypePostgreSqlDAO(Connection connection) {
+	public IdentificationTypePostgreSqlDAO(Connection connection) {
 		super(connection);
 	}
 

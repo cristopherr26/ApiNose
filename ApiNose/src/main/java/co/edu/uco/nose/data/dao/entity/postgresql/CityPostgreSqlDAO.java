@@ -10,7 +10,7 @@ import co.edu.uco.nose.entity.CityEntity;
 
 public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 
-	protected CityPostgreSqlDAO(Connection connection) {
+	public CityPostgreSqlDAO(Connection connection) {
 		super(connection);
 	}
 
