@@ -2,13 +2,13 @@ package co.edu.uco.nose.entity;
 
 import java.util.UUID;
 
-import co.edu.uco.nose.crosscuting.helper.BooleanHelper;
 import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helper.TextHelper;
 import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 
-public final class UserEntity extends Entity {
+public final class UserEntity  {
 	 
+	private UUID id;
 	private IdentificationTypeEntity identificationType;
 	private String identificationNumber;
 	private String firstName;
@@ -20,9 +20,11 @@ public final class UserEntity extends Entity {
 	private String cellPhoneNumber;
 	private boolean emailConfirmed;
 	private boolean cellPhoneNumberConfirmed;
+	private boolean emailConfirmedDefaultValue;
+	private boolean cellPhoneNumberConfirmedDefaultValue;
 	
 	public UserEntity() {
-		super(UUIDHelper.getUUIDHelper().getDefault());
+		setId(UUIDHelper.getUUIDHelper().getDefault());
 		setIdentificationType(IdentificationTypeEntity.getDefaultValue());
 		setIdentificationNumber(TextHelper.getDefault());;
 		setFirstName(TextHelper.getDefault());
@@ -32,12 +34,14 @@ public final class UserEntity extends Entity {
 		setResidenceCity(CityEntity.getDefaultValue());
 		setEmail(TextHelper.getDefault());
 		setCellPhoneNumber(TextHelper.getDefault());
-		setCellPhoneNumberConfirmed(BooleanHelper.getDefault());
-		setEmailConfirmed(BooleanHelper.getDefault());
+		setCellPhoneNumberConfirmed(false);
+		setCellPhoneNumberConfirmedDefaultValue(true);
+		setEmailConfirmed(false);
+		setEmailConfirmedDefaultValue(true);
 	}
 	
 	public UserEntity(final UUID id) {
-		super(id);
+		setId(id);
 		setIdentificationType(IdentificationTypeEntity.getDefaultValue());
 		setIdentificationNumber(TextHelper.getDefault());
 		setFirstName(TextHelper.getDefault());
@@ -47,26 +51,28 @@ public final class UserEntity extends Entity {
 		setResidenceCity(CityEntity.getDefaultValue());
 		setEmail(TextHelper.getDefault());
 		setCellPhoneNumber(TextHelper.getDefault());
-		setCellPhoneNumberConfirmed(BooleanHelper.getDefault());
-		setEmailConfirmed(BooleanHelper.getDefault());
+		setCellPhoneNumberConfirmed(false);
+		setCellPhoneNumberConfirmedDefaultValue(true);
+		setEmailConfirmed(false);
+		setEmailConfirmedDefaultValue(true);
 	}
 	
 	
 	public UserEntity(final UUID id, final IdentificationTypeEntity identificationType, final String identificationNumber, final String firstName,
 			final String middleName, final String lastName, final String secondLastName, final CityEntity residenceCity, final String email,
 			final String cellPhoneNumber, final boolean emailConfirmed, final boolean cellPhoneNumberConfirmed) {
-		super(id);
-		this.identificationType = identificationType;
-		this.identificationNumber = identificationNumber;
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
-		this.secondLastName = secondLastName;
-		this.residenceCity = residenceCity;
-		this.email = email;
-		this.cellPhoneNumber = cellPhoneNumber;
-		this.emailConfirmed = emailConfirmed;
-		this.cellPhoneNumberConfirmed = cellPhoneNumberConfirmed;
+		setId(id);
+		setIdentificationType(identificationType);
+		setIdentificationNumber(identificationNumber);
+		setFirstName(firstName);
+		setMiddleName(middleName);
+		setLastName(lastName);
+		setSecondLastName(secondLastName);
+		setResidenceCity(residenceCity);
+		setEmail(email);
+		setCellPhoneNumber(cellPhoneNumber);
+		setEmailConfirmed(emailConfirmed);
+		setCellPhoneNumberConfirmed(cellPhoneNumberConfirmed);
 	}
 	
 	static UserEntity getDefaultValue() {
@@ -75,6 +81,15 @@ public final class UserEntity extends Entity {
 	
 	static UserEntity getDefaultValue(final UserEntity user) {
 		return ObjectHelper.getDefault(user, getDefaultValue());
+	}
+	
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(final UUID id) {
+		this.id = UUIDHelper.getUUIDHelper().getDefault(id);
 	}
 
 	public IdentificationTypeEntity getIdentificationType() {
@@ -154,7 +169,8 @@ public final class UserEntity extends Entity {
 	}
 	
 	public void setEmailConfirmed(final boolean emailConfirmed) {
-		this.emailConfirmed = BooleanHelper.getDeafult(emailConfirmed);
+		this.emailConfirmed = emailConfirmed;
+		setEmailConfirmedDefaultValue(false);
 	}
 	
 	public boolean isCellPhoneNumberConfirmed() {
@@ -162,8 +178,27 @@ public final class UserEntity extends Entity {
 	}
 	
 	public void setCellPhoneNumberConfirmed(final boolean cellPhoneNumberConfirmed) {
-		this.cellPhoneNumberConfirmed = BooleanHelper.getDeafult(cellPhoneNumberConfirmed);
+		this.cellPhoneNumberConfirmed = cellPhoneNumberConfirmed;
+		setCellPhoneNumberConfirmedDefaultValue(false);
 	}
+
+	public boolean isEmailConfirmedDefaultValue() {
+		return emailConfirmedDefaultValue;
+	}
+
+	private void setEmailConfirmedDefaultValue(boolean emailConfirmedDefaultValue) {
+		this.emailConfirmedDefaultValue = emailConfirmedDefaultValue;
+	}
+
+	public boolean isCellPhoneNumberConfirmedDefaultValue() {
+		return cellPhoneNumberConfirmedDefaultValue;
+	}
+
+	private void setCellPhoneNumberConfirmedDefaultValue(boolean cellPhoneNumberConfirmedDefaultValue) {
+		this.cellPhoneNumberConfirmedDefaultValue = cellPhoneNumberConfirmedDefaultValue;
+	}
+	
+	
 	
 	
 }

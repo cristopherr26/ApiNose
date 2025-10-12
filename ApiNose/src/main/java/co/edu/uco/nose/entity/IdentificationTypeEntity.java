@@ -6,23 +6,24 @@ import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helper.TextHelper;
 import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 
-public final class IdentificationTypeEntity extends Entity {
+public final class IdentificationTypeEntity{
 	
+	private UUID id;
 	private String name;
 	
 	public IdentificationTypeEntity() {
-		super(UUIDHelper.getUUIDHelper().getDefault());
+		setId(UUIDHelper.getUUIDHelper().getDefault());
 		setName(TextHelper.getDefault());
 	}
 	
 	public IdentificationTypeEntity(final UUID id) {
-		super(id);
+		setId(id);
 		setName(TextHelper.getDefault());
 	}
 	
 
 	public IdentificationTypeEntity(final UUID id, final String name) {
-		super(id);
+		setId(id);
 		this.name = name;
 	}
 	
@@ -40,6 +41,14 @@ public final class IdentificationTypeEntity extends Entity {
 
 	public void setName(final String name) {
 		this.name = TextHelper.getDefaultWithTrim(name);
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(final UUID id) {
+		this.id = UUIDHelper.getUUIDHelper().getDefault(id);
 	}
 	
 	

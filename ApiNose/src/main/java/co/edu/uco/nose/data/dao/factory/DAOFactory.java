@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.crosscuting.helper.SqlConnectionHelper;
+import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.entity.CityDAO;
 import co.edu.uco.nose.data.dao.entity.CountryDAO;
 import co.edu.uco.nose.data.dao.entity.IdentificationTypeDAO;
@@ -47,9 +48,13 @@ public abstract class DAOFactory {
 		try {
 			connection.setAutoCommit(false);
 		}catch(final SQLException exception) {
-			var userMessage = "";
-			var technicalMessage = "";
+			var userMessage = MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_STARTED.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_SQL_EXCEPTION_VALIDATING_TRANSACTION_IS_STARTED.getContent();
 			throw NoseException.create(userMessage, technicalMessage);
+		}catch(final Exception exception) {
+			var userMessage =MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_STARTED.getContent();
+			var technicalMessage =MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_STARTED.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
 		}
 	}
 	
@@ -58,9 +63,13 @@ public abstract class DAOFactory {
 		try {
 			connection.commit();
 		 }catch (final SQLException exception){
-			 var userMessage="";
-			 var technicalMessage="";
+			 var userMessage = MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_NOT_STARTED.getContent();
+				var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_SQL_EXCEPTION_VALIDATING_TRANSACTION_IS_NOT_STARTED.getContent();
 			 throw NoseException.create(exception,userMessage,technicalMessage);
+		}catch(final Exception exception) {
+			var userMessage =MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_NOT_STARTED.getContent();
+			var technicalMessage =MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_NOT_STARTED.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
 		}
     }
 	
@@ -68,10 +77,14 @@ public abstract class DAOFactory {
     	SqlConnectionHelper.ensureTransactionIsStarted(connection);
 		try {
 			connection.rollback();
-		 }catch (final SQLException exception){
-			 var userMessage="";
-			 var technicalMessage="";
+		}catch (final SQLException exception){
+			 var userMessage = MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_NOT_STARTED.getContent();
+				var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_SQL_EXCEPTION_VALIDATING_TRANSACTION_IS_NOT_STARTED.getContent();
 			 throw NoseException.create(exception,userMessage,technicalMessage);
+		}catch(final Exception exception) {
+			var userMessage =MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_NOT_STARTED.getContent();
+			var technicalMessage =MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_NOT_STARTED.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
 		}
     }
 	
@@ -81,11 +94,15 @@ public abstract class DAOFactory {
 		try {
 			connection.close();
 		}catch(final SQLException exception){
-			 var userMessage="";
-			 var technicalMessage="";
+			 var userMessage=MessagesEnum.USER_ERROR_SQL_CONNECTION_IS_CLOSED.getContent();
+			 var technicalMessage=MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_IS_CLOSED.getContent();
 			 throw NoseException.create(exception,userMessage,technicalMessage);
+		}catch(final Exception exception) {
+			var userMessage =MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_CONNECTION_STATUS.getContent();
+			var technicalMessage =MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_SQL_EXCEPTION_VALIDATING_CONNECTION_STATUS.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
 		}
 			
-		}
+	}
 }
 
