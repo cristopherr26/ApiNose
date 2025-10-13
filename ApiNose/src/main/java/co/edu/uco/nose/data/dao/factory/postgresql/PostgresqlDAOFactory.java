@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import co.edu.uco.nose.crosscuting.exception.NoseException;
+import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.entity.CityDAO;
 import co.edu.uco.nose.data.dao.entity.CountryDAO;
 import co.edu.uco.nose.data.dao.entity.IdentificationTypeDAO;
@@ -26,14 +27,14 @@ public final class PostgresqlDAOFactory extends DAOFactory {
 	protected void openConnection() {
 		
 		try {
-			this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/nose", "postgres", "admin");
+			this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/ApiNose", "postgres", "11ospinarroyave");
 		} catch (final SQLException exception) {
-			var userMessage = "";
-			var technicalMessage = "";
+			var userMessage = MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_CONNECTION_STATUS.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_SQL_EXCEPTION_VALIDATING_CONNECTION_STATUS.getContent();
 			throw NoseException.create(userMessage, technicalMessage);
 		}catch(final Exception exception) {
-			var userMessage = "";
-			var technicalMessage = "";
+			var userMessage = MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_CONNECTION_STATUS.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_CONNECTION_STATUS.getContent();
 			throw NoseException.create(exception, userMessage, technicalMessage);
 		}
 		
