@@ -25,8 +25,8 @@ public abstract class DAOFactory {
 			return new PostgresqlDAOFactory();
 		}
 		default:
-			var userMessage = "Factoria no iniciada";
-			var technicalMessage = "Factotoria no validada";
+			var userMessage = MessagesEnum.USER_ERROR_FACTORY_NOT_INITIALIZED.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_FACTORY_NOT_VALIDATED.getContent();
 			throw NoseException.create(userMessage, technicalMessage);
 		}
 	}
