@@ -7,13 +7,12 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.uco.nose.crosscuting.exception.NoseException;
-import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.entity.CityDAO;
 import co.edu.uco.nose.data.dao.entity.SqlConnection;
+import co.edu.uco.nose.data.dao.entity.mapper.CityMapper;
 import co.edu.uco.nose.entity.CityEntity;
-import co.edu.uco.nose.entity.CountryEntity;
-import co.edu.uco.nose.entity.StateEntity;
+
 
 public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 
@@ -33,7 +32,7 @@ public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 	    sql.append("  d.id AS idDepartamento, ");
 	    sql.append("  d.nombre AS nombreDepartamento, ");
 	    sql.append("  p.id AS idPais, ");
-	    sql.append("  p.nombre AS nombrePais, ");
+	    sql.append("  p.nombre AS nombrePais ");
 	    sql.append("FROM \"Ciudad\" AS c ");
 		sql.append("INNER JOIN \"Departamento\" AS d ");
 		sql.append("  ON c.departamento = d.id ");
@@ -47,19 +46,7 @@ public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 
 	            while (resultSet.next()) {
 
-	                var country = new CountryEntity();
-	                country.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idPais")));
-	                country.setName(resultSet.getString("nombrePais"));
-	                
-	                var state = new StateEntity();
-	                state.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idDepartamento")));
-	                state.setName(resultSet.getString("nombreDepartamento"));
-	                state.setCountry(country);
-	                
-	                var city = new CityEntity();
-	                city.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idCiudad")));
-	                city.setName(resultSet.getString("nombreCiudad"));
-	                city.setState(state);
+	                var city = CityMapper.map(resultSet);
 	                
 	                cities.add(city);
 	            }
@@ -89,7 +76,7 @@ public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 	public CityEntity findById(UUID id) {
 		final var sql = new StringBuilder();
 
-	    final var city = new CityEntity();
+	    var city = new CityEntity();
 
 	    sql.append("SELECT ");
 	    sql.append("  c.id AS idCiudad, ");
@@ -97,7 +84,7 @@ public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 	    sql.append("  d.id AS idDepartamento, ");
 	    sql.append("  d.nombre AS nombreDepartamento, ");
 	    sql.append("  p.id AS idPais, ");
-	    sql.append("  p.nombre AS nombrePais, ");
+	    sql.append("  p.nombre AS nombrePais ");
 	    sql.append("FROM \"Ciudad\" AS c ");
 		sql.append("INNER JOIN \"Departamento\" AS d ");
 		sql.append("  ON c.departamento = d.id ");
@@ -113,18 +100,7 @@ public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 
 	            if (resultSet.next()) {
 
-	                var country = new CountryEntity();
-	                country.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idPais")));
-	                country.setName(resultSet.getString("nombrePais"));
-	                
-	                var state = new StateEntity();
-	                state.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idDepartamento")));
-	                state.setName(resultSet.getString("nombreDepartamento"));
-	                state.setCountry(country);
-
-	                city.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idCiudad")));
-	                city.setName(resultSet.getString("nombreCiudad"));
-	                city.setState(state);
+	                city = CityMapper.map(resultSet);
 	            }
 	        }
 

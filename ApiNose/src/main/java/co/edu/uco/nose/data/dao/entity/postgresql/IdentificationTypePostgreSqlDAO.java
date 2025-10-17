@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.uco.nose.crosscuting.exception.NoseException;
-import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.entity.IdentificationTypeDAO;
 import co.edu.uco.nose.data.dao.entity.SqlConnection;
+import co.edu.uco.nose.data.dao.entity.mapper.IdentificationTypeMapper;
 import co.edu.uco.nose.entity.IdentificationTypeEntity;
 
 public final class IdentificationTypePostgreSqlDAO extends SqlConnection implements IdentificationTypeDAO {
@@ -26,7 +26,7 @@ public final class IdentificationTypePostgreSqlDAO extends SqlConnection impleme
 		
 		sql.append("SELECT ");
 		sql.append("  t.id, ");
-		sql.append("  t.nombre, ");
+		sql.append("  t.nombre ");
 		sql.append("  from \"Tipolidentificacion\" as t ");
 		
 		try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())) {
@@ -36,10 +36,8 @@ public final class IdentificationTypePostgreSqlDAO extends SqlConnection impleme
 				
 				while (resultSet.next()) {
 					
-					var identificationType = new IdentificationTypeEntity();
+					var identificationType = IdentificationTypeMapper.map(resultSet);
 					
-					identificationType.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("id")));
-					identificationType.setName(resultSet.getString("nombre"));
 					identificationTypes.add(identificationType);
 					
 				}
@@ -68,13 +66,12 @@ public final class IdentificationTypePostgreSqlDAO extends SqlConnection impleme
 
 	@Override
 	public IdentificationTypeEntity findById(UUID id) {
-		
-		final var identificationType = new IdentificationTypeEntity();
+		var identificationType = new IdentificationTypeEntity();
 		final var sql = new StringBuilder();
 		
 		sql.append("SELECT ");
 		sql.append("  t.id, ");
-		sql.append("  t.nombre, ");
+		sql.append("  t.nombre ");
 		sql.append("  from \"Tipolidentificacion\" as t ");
 		sql.append("  where t.id = ? ");
 		
@@ -86,8 +83,7 @@ public final class IdentificationTypePostgreSqlDAO extends SqlConnection impleme
 				
 				if(resultSet.next()) {
 					
-					identificationType.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("id")));
-					identificationType.setName(resultSet.getString("nombre"));
+					identificationType = IdentificationTypeMapper.map(resultSet);
 					
 				}
 				

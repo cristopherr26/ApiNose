@@ -9,14 +9,10 @@ import java.util.UUID;
 
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.crosscuting.helper.SqlConnectionHelper;
-import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.entity.SqlConnection;
 import co.edu.uco.nose.data.dao.entity.UserDAO;
-import co.edu.uco.nose.entity.CityEntity;
-import co.edu.uco.nose.entity.CountryEntity;
-import co.edu.uco.nose.entity.IdentificationTypeEntity;
-import co.edu.uco.nose.entity.StateEntity;
+import co.edu.uco.nose.data.dao.entity.mapper.UserMapper;
 import co.edu.uco.nose.entity.UserEntity;
 
 public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
@@ -31,7 +27,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		SqlConnectionHelper.ensureTransactionIsStarted(getConnection());
 		
 		final var sql= new StringBuilder();
-		sql.append("INSERT INTO Usuario(id, tipoIdentificacion, numeroIdentificacion, primerNombre, segundoNombre, primerApellido, segundoApellido, ciudadResidencia, correoElectronico, numeroTelefonoMovil, correoElectronicoConfirmado, numeroTelefonoMovilConfirmado) ");
+		sql.append("INSERT INTO \"Usuario\"(id, \"tipoIdentificacion\", \"numeroIdentificacion\", \"primerNombre\", \"segundoNombre\", \"primerApellido\", \"segundoApellido\", \"ciudadResidencia\", \"correoElectronico\", \"numeroTelefonoMovil\", \"correoElectronicoConfirmado\", \"numeroTelefonoMovilConfirmado\") ");
 		sql.append("VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?");
 		
 		try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())) {
@@ -72,67 +68,38 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 	    sql.append("  u.id, ");
 	    sql.append("  ti.id AS idTipoIdentificacion, ");
 	    sql.append("  ti.nombre AS nombreTipoIdentificacion, ");
-	    sql.append("  u.numeroIdentificacion, ");
-	    sql.append("  u.primerNombre, ");
-	    sql.append("  u.segundoNombre, ");
-	    sql.append("  u.primerApellido, ");
-	    sql.append("  u.segundoApellido, ");
+	    sql.append("  u.\"numeroIdentificacion\", ");
+	    sql.append("  u.\"primerNombre\", ");
+	    sql.append("  u.\"segundoNombre\", ");
+	    sql.append("  u.\"primerApellido\", ");
+	    sql.append("  u.\"segundoApellido\", ");
 	    sql.append("  c.id AS idCiudadResidencia, ");
 	    sql.append("  c.nombre AS nombreCiudadResidencia, ");
 	    sql.append("  d.id AS idDepartamentoCiudadResidencia, ");
 	    sql.append("  d.nombre AS nombreDepartamentoCiudadResidencia, ");
 	    sql.append("  p.id AS idPaisDepartamentoCiudadResidencia, ");
 	    sql.append("  p.nombre AS nombrePaisDepartamentoCiudadResidencia, ");
-	    sql.append("  u.correoElectronico, ");
-	    sql.append("  u.numeroTelefonoMovil, ");
-	    sql.append("  u.correoElectronicoConfirmado, ");
-	    sql.append("  u.numeroTelefonoMovilConfirmado ");
+	    sql.append("  u.\"correoElectronico\", ");
+	    sql.append("  u.\"numeroTelefonoMovil\", ");
+	    sql.append("  u.\"correoElectronicoConfirmado\", ");
+	    sql.append("  u.\"numeroTelefonoMovilConfirmado\" ");
 	    sql.append("FROM \"Usuario\" AS u ");
-		sql.append("INNER JOIN \"TipoIdentificacion\" AS ti ");
-		sql.append("  ON u.tipoIdentificacion = ti.id ");
-		sql.append("INNER JOIN \"Ciudad\" AS c ");
-		sql.append("  ON u.ciudadResidencia = c.id ");
-		sql.append("INNER JOIN \"Departamento\" AS d ");
-		sql.append("  ON c.departamento = d.id ");
-		sql.append("INNER JOIN \"Pais\" AS p ");
-		sql.append("  ON d.pais = p.id;");
+	    sql.append("INNER JOIN \"TipoIdentificacion\" AS ti ");
+	    sql.append("  ON u.\"tipoIdentificacion\" = ti.id ");
+	    sql.append("INNER JOIN \"Ciudad\" AS c ");
+	    sql.append("  ON u.\"ciudadResidencia\" = c.id ");
+	    sql.append("INNER JOIN \"Departamento\" AS d ");
+	    sql.append("  ON c.\"departamento\" = d.id ");
+	    sql.append("INNER JOIN \"Pais\" AS p ");
+	    sql.append("  ON d.pais = p.id ");
+
 
 	    try (var preparedStatement = this.getConnection().prepareStatement(sql.toString());
 	         var resultSet = preparedStatement.executeQuery()) {
 
 	        while (resultSet.next()) {
 
-	            var identificationType = new IdentificationTypeEntity();
-	            identificationType.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idTipoIdentificacion")));
-	            identificationType.setName(resultSet.getString("nombreTipoIdentificacion"));
-
-	            var country = new CountryEntity();
-	            country.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idPaisDepartamentoCiudadResidencia")));
-	            country.setName(resultSet.getString("nombrePaisDepartamentoCiudadResidencia"));
-
-	            var state = new StateEntity();
-	            state.setCountry(country);
-	            state.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idDepartamentoCiudadResidencia")));
-	            state.setName(resultSet.getString("nombreDepartamentoCiudadResidencia"));
-
-	            var city = new CityEntity();
-	            city.setState(state);
-	            city.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idCiudadResidencia")));
-	            city.setName(resultSet.getString("nombreCiudadResidencia"));
-
-	            var user = new UserEntity();
-	            user.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("id")));
-	            user.setIdentificationType(identificationType);
-	            user.setIdentificationNumber(resultSet.getString("numeroIdentificacion"));
-	            user.setFirstName(resultSet.getString("primerNombre"));
-	            user.setMiddleName(resultSet.getString("segundoNombre"));
-	            user.setLastName(resultSet.getString("primerApellido"));
-	            user.setSecondLastName(resultSet.getString("segundoApellido"));
-	            user.setResidenceCity(city);
-	            user.setEmail(resultSet.getString("correoElectronico"));
-	            user.setCellPhoneNumber(resultSet.getString("numeroTelefonoMovil"));
-	            user.setEmailConfirmed(resultSet.getBoolean("correoElectronicoConfirmado"));
-	            user.setCellPhoneNumberConfirmed(resultSet.getBoolean("numeroTelefonoMovilConfirmado"));
+	           var user = UserMapper.map(resultSet);
 
 	            users.add(user);
 	        }
@@ -164,33 +131,33 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		final var sql = new StringBuilder();
 		
 		sql.append("SELECT ");
-		sql.append("  u.id, ");
-		sql.append("  ti.id AS idTipoIdentificacion, ");
-		sql.append("  ti.nombre AS nombreTipoIdentificacion, ");
-		sql.append("  u.numeroIdentificacion, ");
-		sql.append("  u.primerNombre, ");
-		sql.append("  u.segundoNombre, ");
-		sql.append("  u.primerApellido, ");
-		sql.append("  u.segundoApellido, ");
-		sql.append("  c.id AS idCiudadResidencia, ");
-		sql.append("  c.nombre AS nombreCiudadResidencia, ");
-		sql.append("  d.id AS idDepartamentoCiudadResidencia, ");
-		sql.append("  d.nombre AS nombreDepartamentoCiudadResidencia, ");
-		sql.append("  p.id AS idPaisDepartamentoCiudadResidencia, ");
-		sql.append("  p.nombre AS nombrePaisDepartamentoCiudadResidencia, ");
-		sql.append("  u.correoElectronico, ");
-		sql.append("  u.numeroTelefonoMovil, ");
-		sql.append("  u.correoElectronicoConfirmado, ");
-		sql.append("  u.numeroTelefonoMovilConfirmado ");
-		sql.append("FROM \"Usuario\" AS u ");
-		sql.append("INNER JOIN \"TipoIdentificacion\" AS ti ");
-		sql.append("  ON u.tipoIdentificacion = ti.id ");
-		sql.append("INNER JOIN \"Ciudad\" AS c ");
-		sql.append("  ON u.ciudadResidencia = c.id ");
-		sql.append("INNER JOIN \"Departamento\" AS d ");
-		sql.append("  ON c.departamento = d.id ");
-		sql.append("INNER JOIN \"Pais\" AS p ");
-		sql.append("  ON d.pais = p.id;");
+	    sql.append("  u.id, ");
+	    sql.append("  ti.id AS idTipoIdentificacion, ");
+	    sql.append("  ti.nombre AS nombreTipoIdentificacion, ");
+	    sql.append("  u.\"numeroIdentificacion\", ");
+	    sql.append("  u.\"primerNombre\", ");
+	    sql.append("  u.\"segundoNombre\", ");
+	    sql.append("  u.\"primerApellido\", ");
+	    sql.append("  u.\"segundoApellido\", ");
+	    sql.append("  c.id AS idCiudadResidencia, ");
+	    sql.append("  c.nombre AS nombreCiudadResidencia, ");
+	    sql.append("  d.id AS idDepartamentoCiudadResidencia, ");
+	    sql.append("  d.nombre AS nombreDepartamentoCiudadResidencia, ");
+	    sql.append("  p.id AS idPaisDepartamentoCiudadResidencia, ");
+	    sql.append("  p.nombre AS nombrePaisDepartamentoCiudadResidencia, ");
+	    sql.append("  u.\"correoElectronico\", ");
+	    sql.append("  u.\"numeroTelefonoMovil\", ");
+	    sql.append("  u.\"correoElectronicoConfirmado\", ");
+	    sql.append("  u.\"numeroTelefonoMovilConfirmado\" ");
+	    sql.append("FROM \"Usuario\" AS u ");
+	    sql.append("INNER JOIN \"TipoIdentificacion\" AS ti ");
+	    sql.append("  ON u.\"tipoIdentificacion\" = ti.id ");
+	    sql.append("INNER JOIN \"Ciudad\" AS c ");
+	    sql.append("  ON u.\"ciudadResidencia\" = c.id ");
+	    sql.append("INNER JOIN \"Departamento\" AS d ");
+	    sql.append("  ON c.\"departamento\" = d.id ");
+	    sql.append("INNER JOIN \"Pais\" AS p ");
+	    sql.append("  ON d.pais = p.id ");
 		sql.append("WHERE u.id = ? ");
 		
 		try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())) {
@@ -201,36 +168,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 				
 				if(resultSet.next()) {
 					
-					var identificationType = new IdentificationTypeEntity();
-					identificationType.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idTipoIdentificacion")));
-					identificationType.setName(resultSet.getString("nombreTipoIdentificacion"));
-					
-					var country = new CountryEntity();
-					country.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idPaisDepartamentoCiudadResidencia")));
-					country.setName(resultSet.getString("nombrePaisDepartamentoCiudadResidencia"));
-					
-					var state = new StateEntity();
-					state.setCountry(country);
-					state.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idDepartamentoCiudadResidencia")));
-					state.setName(resultSet.getString("nombreDepartamentoCiudadResidencia"));
-					
-					var city = new CityEntity();
-					city.setState(state);
-					city.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idCiudadResidencia")));
-					city.setName(resultSet.getString("nombreCiudadResidencia"));
-					
-					user.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("id")));
-					user.setIdentificationType(identificationType);
-					user.setIdentificationNumber(resultSet.getString("numeroIdentificacion"));
-					user.setFirstName(resultSet.getString("primerNombre"));
-					user.setMiddleName(resultSet.getString("segundoNombre"));
-					user.setLastName(resultSet.getString("primerApellido"));
-					user.setSecondLastName(resultSet.getString("segundoApellido"));
-					user.setResidenceCity(city);
-					user.setEmail(resultSet.getString("correoElectronico"));
-					user.setCellPhoneNumber(resultSet.getString("numeroTelefonoMovil"));
-					user.setEmailConfirmed(resultSet.getBoolean("correoElectronicoConfirmado"));
-					user.setCellPhoneNumberConfirmed(resultSet.getBoolean("numeroTelefonoMovilConfirmado"));
+					user = UserMapper.map(resultSet);
 					
 				}
 				

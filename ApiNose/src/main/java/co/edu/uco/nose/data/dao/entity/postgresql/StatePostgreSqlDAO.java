@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.uco.nose.crosscuting.exception.NoseException;
-import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.entity.SqlConnection;
 import co.edu.uco.nose.data.dao.entity.StateDAO;
-import co.edu.uco.nose.entity.CountryEntity;
+import co.edu.uco.nose.data.dao.entity.mapper.StateMapper;
 import co.edu.uco.nose.entity.StateEntity;
 
 public final class StatePostgreSqlDAO extends SqlConnection implements StateDAO {
@@ -41,14 +40,7 @@ public final class StatePostgreSqlDAO extends SqlConnection implements StateDAO 
 
 	            while (resultSet.next()) {
 
-	                var country = new CountryEntity();
-	                country.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idPais")));
-	                country.setName(resultSet.getString("nombrePais"));
-	                
-	                var state = new StateEntity();
-	                state.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idDepartamento")));
-	                state.setName(resultSet.getString("nombreDepartamento"));
-	                state.setCountry(country);
+	                var state = StateMapper.map(resultSet);
 	                
 	                states.add(state);
 	            }
@@ -80,8 +72,7 @@ public final class StatePostgreSqlDAO extends SqlConnection implements StateDAO 
 	public StateEntity findById(UUID id) {
 		
 		final var sql = new StringBuilder();
-
-	    final var state = new StateEntity();
+		var state = new StateEntity();
 
 	    sql.append("SELECT ");
 	    sql.append("  d.id AS idDepartamento, ");
@@ -101,13 +92,7 @@ public final class StatePostgreSqlDAO extends SqlConnection implements StateDAO 
 
 	            if (resultSet.next()) {
 
-	                var country = new CountryEntity();
-	                country.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idPais")));
-	                country.setName(resultSet.getString("nombrePais"));
-
-	                state.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idDepartamento")));
-	                state.setName(resultSet.getString("nombreDepartamento"));
-	                state.setCountry(country);
+	                state = StateMapper.map(resultSet);
 	            }
 	        }
 
