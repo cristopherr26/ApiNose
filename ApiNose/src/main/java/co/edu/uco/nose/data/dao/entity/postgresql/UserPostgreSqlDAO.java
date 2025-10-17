@@ -118,9 +118,100 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 	}
 
 	@Override
-	public List<UserEntity> findByFilter(UserEntity filterEntity) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<UserEntity> findByFilter(final UserEntity filterEntity) {
+		
+		final var users = new ArrayList<UserEntity>();
+
+	    final var sql = new StringBuilder();
+	    sql.append("SELECT ");
+	    sql.append("  u.id, ");
+	    sql.append("  ti.id AS idTipoIdentificacion, ");
+	    sql.append("  ti.nombre AS nombreTipoIdentificacion, ");
+	    sql.append("  u.\"numeroIdentificacion\", ");
+	    sql.append("  u.\"primerNombre\", ");
+	    sql.append("  u.\"segundoNombre\", ");
+	    sql.append("  u.\"primerApellido\", ");
+	    sql.append("  u.\"segundoApellido\", ");
+	    sql.append("  c.id AS idCiudadResidencia, ");
+	    sql.append("  c.nombre AS nombreCiudadResidencia, ");
+	    sql.append("  d.id AS idDepartamentoCiudadResidencia, ");
+	    sql.append("  d.nombre AS nombreDepartamentoCiudadResidencia, ");
+	    sql.append("  p.id AS idPaisDepartamentoCiudadResidencia, ");
+	    sql.append("  p.nombre AS nombrePaisDepartamentoCiudadResidencia, ");
+	    sql.append("  u.\"correoElectronico\", ");
+	    sql.append("  u.\"numeroTelefonoMovil\", ");
+	    sql.append("  u.\"correoElectronicoConfirmado\", ");
+	    sql.append("  u.\"numeroTelefonoMovilConfirmado\" ");
+	    sql.append("FROM \"Usuario\" AS u ");
+	    sql.append("INNER JOIN \"TipoIdentificacion\" AS ti ");
+	    sql.append("  ON u.\"tipoIdentificacion\" = ti.id ");
+	    sql.append("INNER JOIN \"Ciudad\" AS c ");
+	    sql.append("  ON u.\"ciudadResidencia\" = c.id ");
+	    sql.append("INNER JOIN \"Departamento\" AS d ");
+	    sql.append("  ON c.\"departamento\" = d.id ");
+	    sql.append("INNER JOIN \"Pais\" AS p ");
+	    sql.append("  ON d.pais = p.id ");
+	    sql.append("WHERE 1=1 ");
+	    
+	    final var parameters = new ArrayList<Object>();
+	    
+	    if (filterEntity != null) {
+	        if (filterEntity.getIdentificationType() != null && !filterEntity.getIdentificationType().getName().isBlank()) {
+	            sql.append("AND nombreTipoIdentificacion = ? ");
+	            parameters.add(filterEntity.getIdentificationType().getName());
+	        }
+	        if (filterEntity.getFirstName() != null && !filterEntity.getFirstName().isBlank()) {
+	            sql.append("AND u.\"primerNombre\" ILIKE ? ");
+	            parameters.add("%" + filterEntity.getFirstName() + "%");
+	        }
+	        
+	        if (filterEntity.getMiddleName() != null && !filterEntity.getMiddleName().isBlank()) {
+	            sql.append("AND u.\"segundoNombre\" ILIKE ? ");
+	            parameters.add("%" + filterEntity.getMiddleName() + "%");
+	        }
+	        
+	        if (filterEntity.getLastName() != null && !filterEntity.getLastName().isBlank()) {
+	            sql.append("AND u.\"primerApellido\" ILIKE ? ");
+	            parameters.add("%" + filterEntity.getLastName() + "%");
+	        }
+	        
+	        if (filterEntity.getSecondLastName() != null && !filterEntity.getFirstName().isBlank()) {
+	            sql.append("AND u.\"segundoApellido\" ILIKE ? ");
+	            parameters.add("%" + filterEntity.getSecondLastName() + "%");
+	        }
+	        
+	        if (filterEntity.getResidenceCity() != null && !filterEntity.getResidenceCity().getName().isBlank()) {
+	            sql.append("AND nombreTipoIdentificacion = ? ");
+	            parameters.add(filterEntity.getIdentificationType().getName());
+	        }
+	    }
+	    
+	    try (var preparedStatement = this.getConnection().prepareStatement(sql.toString());
+	    var resultSet = preparedStatement.executeQuery()) {
+	    	
+	    	for (int i = 0; i < parameters.size(); i++) {
+	    		preparedStatement.setObject(i + 1, parameters.get(i));
+	    	}
+	    	
+
+	 	        while (resultSet.next()) {
+
+	 	           var user = UserMapper.map(resultSet);
+
+	 	            users.add(user);
+	 	        }
+
+	 	    } catch (final SQLException exception) {
+	 	        var userMessage = MessagesEnum.USER_ERROR_SQL_EXCEPTION_FINDING_USER.getContent();
+	 	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_EXCEPTION_FINDING_USER + exception.getMessage();
+	 	        throw NoseException.create(exception, userMessage, technicalMessage);
+	 	    } catch (final Exception exception) {
+	 	        var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER.getContent();
+	 	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER.getContent() + exception.getMessage();
+	 	        throw NoseException.create(exception, userMessage, technicalMessage);
+	 	    }
+
+	 	    return users;
 	}
 
 	@Override
