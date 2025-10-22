@@ -2,6 +2,8 @@ package co.edu.uco.nose.business.assembler.entity.impl;
 
 import co.edu.uco.nose.business.assembler.entity.EntityAssembler;
 import co.edu.uco.nose.business.domain.IdentificationTypeDomain;
+import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
+import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.entity.IdentificationTypeEntity;
 
 public final class IdentificationTypeEntityAssembler implements EntityAssembler<IdentificationTypeEntity, IdentificationTypeDomain> {
@@ -17,14 +19,14 @@ public final class IdentificationTypeEntityAssembler implements EntityAssembler<
 	
 	@Override
 	public IdentificationTypeEntity toEntity(final IdentificationTypeDomain domain) {
-		// TODO Auto-generated method stub
-		return null;
+		var domainTmp = ObjectHelper.getDefault(domain, new IdentificationTypeDomain(UUIDHelper.getUUIDHelper().getDefault()));
+		return new IdentificationTypeEntity(domainTmp.getId(), domainTmp.getName());
 	}
 
 	@Override
 	public IdentificationTypeDomain toDomain(final IdentificationTypeEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		var entityTmp = ObjectHelper.getDefault(entity, new IdentificationTypeEntity());
+		return new IdentificationTypeDomain(entityTmp.getId(), entityTmp.getName());
 	}
 
 }

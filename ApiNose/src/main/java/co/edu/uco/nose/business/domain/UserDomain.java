@@ -22,7 +22,7 @@ public final class UserDomain extends Domain {
 	private boolean cellPhoneNumberConfirmed;
 	private boolean cellPhoneNumberConfirmedDefaultValue;
 	
-	public UserDomain() {
+	 UserDomain() {
 		super(UUIDHelper.getUUIDHelper().getDefault());
 		setIdentificationType(IdentificationTypeDomain.getDefaultValue());
 		setIdentificationNumber(TextHelper.getDefault());;

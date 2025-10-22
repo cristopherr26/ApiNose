@@ -11,7 +11,7 @@ public final class CityDomain extends Domain{
 	private String name;
 	private StateDomain state;
 	
-	public CityDomain() {
+	 CityDomain() {
 		super(UUIDHelper.getUUIDHelper().getDefault());
 		setName(TextHelper.getDefault());
 		setState(StateDomain.getDefaultValue());

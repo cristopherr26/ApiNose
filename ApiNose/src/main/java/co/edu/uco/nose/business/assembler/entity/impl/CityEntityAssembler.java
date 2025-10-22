@@ -1,7 +1,11 @@
 package co.edu.uco.nose.business.assembler.entity.impl;
 
+import static co.edu.uco.nose.business.assembler.entity.impl.StateEntityAssembler.getStateEntityAssembler;
+
 import co.edu.uco.nose.business.assembler.entity.EntityAssembler;
 import co.edu.uco.nose.business.domain.CityDomain;
+import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
+import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.entity.CityEntity;
 
 public final class CityEntityAssembler implements EntityAssembler<CityEntity, CityDomain> {
@@ -17,14 +21,16 @@ public final class CityEntityAssembler implements EntityAssembler<CityEntity, Ci
 	
 	@Override
 	public CityEntity toEntity(final CityDomain domain) {
-		// TODO Auto-generated method stub
-		return null;
+		var domainTmp = ObjectHelper.getDefault(domain, new CityDomain(UUIDHelper.getUUIDHelper().getDefault()));
+		var stateTmp = getStateEntityAssembler().toEntity(domainTmp.getState());
+		return new CityEntity(domainTmp.getId(), domainTmp.getName(), stateTmp);
 	}
 
 	@Override
 	public CityDomain toDomain(final CityEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		var entityTmp = ObjectHelper.getDefault(entity, new CityEntity());
+		var stateDomainTmp = getStateEntityAssembler().toDomain(entityTmp.getState());
+		return new CityDomain(entityTmp.getId(), entityTmp.getName(), stateDomainTmp);
 	}
 
 }

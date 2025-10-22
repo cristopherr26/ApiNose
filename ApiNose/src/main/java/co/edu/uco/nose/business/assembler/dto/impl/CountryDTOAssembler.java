@@ -1,5 +1,6 @@
 package co.edu.uco.nose.business.assembler.dto.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import co.edu.uco.nose.business.assembler.dto.DTOAssembler;
@@ -32,9 +33,15 @@ public final class CountryDTOAssembler implements DTOAssembler<CountryDto, Count
 	}
 
 	@Override
-	public List<CountryDto> toDTO(List<CountryDomain> domainList) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CountryDto> toDTO(final List<CountryDomain> domainList) {
+		var countryDtoList = new ArrayList<CountryDto>();
+		
+		for (var countryDomain : domainList) {
+			
+			countryDtoList.add(toDTO(countryDomain));
+			
+		}
+		return countryDtoList;
 	}
 
 }

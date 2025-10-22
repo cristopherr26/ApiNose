@@ -26,8 +26,8 @@ public final class StateEntity {
 	
 	public StateEntity(final UUID id, final String name, final CountryEntity country) {
 		setId(id);
-		this.name = name;
-		this.country = country;
+		setName(name);
+		setCountry(country);
 	}
 	
 	static StateEntity getDefaultValue() {

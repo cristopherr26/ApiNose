@@ -26,8 +26,8 @@ public final class CityEntity {
 	
 	public CityEntity(final UUID id, final String name, final StateEntity state) {
 		setId(id);
-		this.name = name;
-		this.state = state;
+		setName(name);
+		setState(state);
 	}
 	
 	static CityEntity getDefaultValue() {

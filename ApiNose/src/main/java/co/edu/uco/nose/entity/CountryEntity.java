@@ -18,7 +18,7 @@ public final class CountryEntity{
 	}
 
 	public CountryEntity(final UUID id) {
-	setId(id);
+		setId(id);
 		setName(TextHelper.getDefault());
 	}
 

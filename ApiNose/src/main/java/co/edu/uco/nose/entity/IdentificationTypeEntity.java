@@ -24,7 +24,7 @@ public final class IdentificationTypeEntity{
 
 	public IdentificationTypeEntity(final UUID id, final String name) {
 		setId(id);
-		this.name = name;
+		setName(name);
 	}
 	
 	static IdentificationTypeEntity getDefaultValue() {

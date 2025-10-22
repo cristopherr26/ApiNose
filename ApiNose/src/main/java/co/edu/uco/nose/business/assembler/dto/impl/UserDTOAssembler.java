@@ -3,8 +3,13 @@ package co.edu.uco.nose.business.assembler.dto.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import static co.edu.uco.nose.business.assembler.dto.impl.CityDTOAssembler.getCityDTOAssembler;
+import static co.edu.uco.nose.business.assembler.dto.impl.IdentificationTypeDTOAssembler.getIdentificationTypeDTOAssembler;
+
 import co.edu.uco.nose.business.assembler.dto.DTOAssembler;
 import co.edu.uco.nose.business.domain.UserDomain;
+import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
+import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.dto.UserDto;
 
 public final class UserDTOAssembler implements DTOAssembler<UserDto, UserDomain> {
@@ -21,14 +26,24 @@ public final class UserDTOAssembler implements DTOAssembler<UserDto, UserDomain>
 	
 	@Override
 	public UserDto toDTO(final UserDomain domain) {
-		// TODO Auto-generated method stub
-		return null;
+		var domainTmp = ObjectHelper.getDefault(domain, new UserDomain(UUIDHelper.getUUIDHelper().getDefault()));
+		var identificationTypeTmp = getIdentificationTypeDTOAssembler().toDTO(domainTmp.getIdentificationType());
+		var cityTmp = getCityDTOAssembler().toDTO(domainTmp.getResidenceCity());
+		return new UserDto(domainTmp.getId(), identificationTypeTmp, domainTmp.getIdentificationNumber(), 
+				domainTmp.getFirstName(), domainTmp.getMiddleName(), domainTmp.getLastName(), 
+				domainTmp.getSecondLastName(), cityTmp, domainTmp.getEmail(), 
+				domainTmp.getCellPhoneNumber(), domainTmp.isEmailConfirmed(), domainTmp.isCellPhoneNumberConfirmed());
 	}
 
 	@Override
 	public UserDomain toDomain(final UserDto dto) {
-		// TODO Auto-generated method stub
-		return null;
+		var dtoTmp = ObjectHelper.getDefault(dto, new UserDto());
+		var identificationTypeDomainTmp = getIdentificationTypeDTOAssembler().toDomain(dtoTmp.getIdentificationType());
+		var cityDomainTmp = getCityDTOAssembler().toDomain(dtoTmp.getResidenceCity());
+		return new UserDomain(dtoTmp.getId(), identificationTypeDomainTmp, dtoTmp.getIdentificationNumber(), 
+				dtoTmp.getFirstName(), dtoTmp.getMiddleName(), dtoTmp.getLastName(), 
+				dtoTmp.getSecondLastName(), cityDomainTmp, dtoTmp.getEmail(), 
+				dtoTmp.getCellPhoneNumber(), dtoTmp.isEmailConfirmed(), dtoTmp.isCellPhoneNumberConfirmed());
 	}
 
 	@Override

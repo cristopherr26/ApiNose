@@ -21,6 +21,12 @@ public final class UserBusinessImpl implements UserBusiness {
 	@Override
 	public void registerNewUserInformation(UserDomain userDomain) {
 		
+		//1. Validar que la informacion sea consistente a nivel de tipo de dato, longitud, oblatoriedad
+		//2. Validar que no exista otro usuario con el mismo tipo y número de documento
+		//3. Validar que no exista previamente un usuario con el mismo email
+		//4. Validar que no exista previamente un usuario con el mismo número de teléfono celular
+		//5. Generar un identificador para el nuevo usuario, asegurando de que no exista previamente
+		
 		var id = UUIDHelper.getUUIDHelper().generateNewUUID();
 		var userEntity = UserEntityAssembler.getUserEntityAssembler().toEntity(userDomain);
 		
