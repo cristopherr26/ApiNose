@@ -35,7 +35,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		
 		final var sql= new StringBuilder();
 		sql.append("INSERT INTO \"Usuario\"(id, \"tipoIdentificacion\", \"numeroIdentificacion\", \"primerNombre\", \"segundoNombre\", \"primerApellido\", \"segundoApellido\", \"ciudadResidencia\", \"correoElectronico\", \"numeroTelefonoMovil\", \"correoElectronicoConfirmado\", \"numeroTelefonoMovilConfirmado\") ");
-		sql.append("VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?");
+		sql.append("VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
 		
 		try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())) {
 			
@@ -89,7 +89,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 			throw exception;
 		} catch (final SQLException exception) {
 	        var userMessage = MessagesEnum.USER_ERROR_SQL_EXCEPTION_FINDING_USER_WHILE_EXECUTION.getContent();
-	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_EXCEPTION_FINDING_USER_WHILE_PREPARATION + exception.getMessage();
+	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_EXCEPTION_FINDING_USER_WHILE_PREPARATION.getContent() + exception.getMessage();
 	        throw NoseException.create(exception, userMessage, technicalMessage);
 	    } catch (final Exception exception) {
 	        var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER_WHILE_EXECUTION.getContent();
@@ -103,34 +103,37 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 	private String createSentenceFindByFilter(final UserEntity filterEntity, final List<Object> parametersList) {
 		
 		final var sql = new StringBuilder();
-	    sql.append("SELECT ");
-	    sql.append("  u.id, ");
-	    sql.append("  ti.id AS idTipoIdentificacion, ");
-	    sql.append("  ti.nombre AS nombreTipoIdentificacion, ");
-	    sql.append("  u.\"numeroIdentificacion\", ");
-	    sql.append("  u.\"primerNombre\", ");
-	    sql.append("  u.\"segundoNombre\", ");
-	    sql.append("  u.\"primerApellido\", ");
-	    sql.append("  u.\"segundoApellido\", ");
-	    sql.append("  c.id AS idCiudadResidencia, ");
-	    sql.append("  c.nombre AS nombreCiudadResidencia, ");
-	    sql.append("  d.id AS idDepartamentoCiudadResidencia, ");
-	    sql.append("  d.nombre AS nombreDepartamentoCiudadResidencia, ");
-	    sql.append("  p.id AS idPaisDepartamentoCiudadResidencia, ");
-	    sql.append("  p.nombre AS nombrePaisDepartamentoCiudadResidencia, ");
-	    sql.append("  u.\"correoElectronico\", ");
-	    sql.append("  u.\"numeroTelefonoMovil\", ");
-	    sql.append("  u.\"correoElectronicoConfirmado\", ");
-	    sql.append("  u.\"numeroTelefonoMovilConfirmado\" ");
-	    sql.append("FROM \"Usuario\" AS u ");
-	    sql.append("INNER JOIN \"TipoIdentificacion\" AS ti ");
-	    sql.append("  ON u.\"tipoIdentificacion\" = ti.id ");
-	    sql.append("INNER JOIN \"Ciudad\" AS c ");
-	    sql.append("  ON u.\"ciudadResidencia\" = c.id ");
-	    sql.append("INNER JOIN \"Departamento\" AS d ");
-	    sql.append("  ON c.\"departamento\" = d.id ");
-	    sql.append("INNER JOIN \"Pais\" AS p ");
-	    sql.append("  ON d.pais = p.id ");
+		sql.append("SELECT ");
+		sql.append("  u.\"id\" AS \"idUsuario\", ");
+		sql.append("  ti.\"id\" AS \"idTipoIdentificacion\", ");
+		sql.append("  ti.\"nombre\" AS \"nombreTipoIdentificacion\", ");
+		sql.append("  u.\"tipoIdentificacion\" AS \"tipoIdentificacion\", ");
+		sql.append("  u.\"numeroIdentificacion\" AS \"numeroIdentificacion\", ");
+		sql.append("  u.\"primerNombre\" AS \"primerNombre\", ");
+		sql.append("  u.\"segundoNombre\" AS \"segundoNombre\", ");
+		sql.append("  u.\"primerApellido\" AS \"primerApellido\", ");
+		sql.append("  u.\"segundoApellido\" AS \"segundoApellido\", ");
+		sql.append("  c.\"id\" AS \"idCiudadResidencia\", ");
+		sql.append("  c.\"nombre\" AS \"nombreCiudadResidencia\", ");
+		sql.append("  d.\"id\" AS \"idDepartamentoCiudadResidencia\", ");
+		sql.append("  d.\"nombre\" AS \"nombreDepartamentoCiudadResidencia\", ");
+		sql.append("  p.\"id\" AS \"idPaisDepartamentoCiudadResidencia\", ");
+		sql.append("  p.\"nombre\" AS \"nombrePaisDepartamentoCiudadResidencia\", ");
+		sql.append("  u.\"correoElectronico\" AS \"correoElectronico\", ");
+		sql.append("  u.\"numeroTelefonoMovil\" AS \"numeroTelefonoMovil\", ");
+		sql.append("  u.\"correoElectronicoConfirmado\" AS \"correoElectronicoConfirmado\", ");
+		sql.append("  u.\"numeroTelefonoMovilConfirmado\" AS \"numeroTelefonoMovilConfirmado\", ");
+		sql.append("  u.\"ciudadResidencia\" AS \"ciudadResidencia\" ");
+		sql.append("FROM \"Usuario\" AS u ");
+		sql.append("INNER JOIN \"TipoIdentificacion\" AS ti ");
+		sql.append("  ON u.\"tipoIdentificacion\" = ti.\"id\" ");
+		sql.append("INNER JOIN \"Ciudad\" AS c ");
+		sql.append("  ON u.\"ciudadResidencia\" = c.\"id\" ");
+		sql.append("INNER JOIN \"Departamento\" AS d ");
+		sql.append("  ON c.\"departamento\" = d.\"id\" ");
+		sql.append("INNER JOIN \"Pais\" AS p ");
+		sql.append("  ON d.\"pais\" = p.\"id\" ");
+
 	    
 	    createWhereClauseFindByFilter(sql, parametersList, filterEntity);
 	    
@@ -144,10 +147,10 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		final var conditions = new ArrayList<String>();
 		
 		addCondition(conditions, parametersList, !UUIDHelper.getUUIDHelper().isDefaultUUID(filterEntityValidated.getId()),
-		"u.id = ", filterEntityValidated.getId());
+		"u.\"id\" = ", filterEntityValidated.getId());
 		
 		addCondition(conditions, parametersList, !UUIDHelper.getUUIDHelper().isDefaultUUID(filterEntityValidated.getIdentificationType().getId()),
-		"u.tipoIdentificacion = ", filterEntity.getIdentificationType().getId());
+		"u.\"tipoIdentificacion\" = ", filterEntityValidated.getIdentificationType().getId());
 		
 		addCondition(conditions, parametersList, !TextHelper.isEmptyWithTrim(filterEntityValidated.getIdentificationNumber()),
 		"u.\"numeroIdentificacion\" = ", filterEntityValidated.getIdentificationNumber());
@@ -156,16 +159,13 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		"u.\"primerNombre\" = ", filterEntityValidated.getFirstName());
 		
 		addCondition(conditions, parametersList, !TextHelper.isEmptyWithTrim(filterEntityValidated.getMiddleName()),
-		"u.\"SegundoNombre\" = ", filterEntityValidated.getMiddleName());
+		"u.\"segundoNombre\" = ", filterEntityValidated.getMiddleName());
 		
 		addCondition(conditions, parametersList, !TextHelper.isEmptyWithTrim(filterEntityValidated.getLastName()),
 		"u.\"primerApellido\" = ", filterEntityValidated.getLastName());
 		
 		addCondition(conditions, parametersList, !TextHelper.isEmptyWithTrim(filterEntityValidated.getSecondLastName()),
 		"u.\"segundoApellido\" = ", filterEntityValidated.getSecondLastName());
-		
-		addCondition(conditions, parametersList, !TextHelper.isEmptyWithTrim(filterEntityValidated.getFirstName()),
-		"u.\"primerNombre\" = ", filterEntityValidated.getFirstName());
 		
 		addCondition(conditions, parametersList, !UUIDHelper.getUUIDHelper().isDefaultUUID(filterEntityValidated.getResidenceCity().getId()),
 		"u.\"ciudadResidencia\" = ", filterEntityValidated.getResidenceCity().getId());
@@ -192,7 +192,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 			final String clause, final Object value) {
 		
 		if(condition) {
-			conditions.add(clause);
+			conditions.add(clause + " ?");
 			parametersList.add(value);
 		}
 		
@@ -225,7 +225,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		            city.setName(resultSet.getString("nombreCiudadResidencia"));
 
 		            var user = new UserEntity();
-		            user.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("id")));
+		            user.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idUsuario")));
 		            user.setIdentificationType(identificationType);
 		            user.setIdentificationNumber(resultSet.getString("numeroIdentificacion"));
 		            user.setFirstName(resultSet.getString("primerNombre"));

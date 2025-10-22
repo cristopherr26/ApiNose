@@ -76,7 +76,37 @@ public enum MessagesEnum {
 	USER_ERROR_SQL_EXCEPTION_USER_MAPPER("Error al procesar la información del usuario", "Se ha presentado un problema al intentar mapear los datos del usuario desde la base de datos. Por favor, intente nuevamente. Si el problema persiste, contacte al administrador del sistema."),
 	TECHNICAL_ERROR_SQL_EXCEPTION_USER_MAPPER("Error técnico al mapear el usuario", "Ocurrió un error técnico al intentar convertir los datos del usuario desde el ResultSet hacia la entidad UserEntity. Revise la estructura de las columnas o los alias definidos en la consulta SQL."),
 	USER_ERROR_UNEXPECTED_EXCEPTION_USER_MAPPER("Error inesperado al procesar el usuario", "Se ha producido un error inesperado durante la conversión del usuario. Intente nuevamente o comuníquese con el administrador del sistema."),
-	TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_USER_MAPPER("Error técnico inesperado al mapear el usuario","Se presentó una excepción no controlada durante el proceso de mapeo de la entidad UserEntity. Verifique posibles valores nulos o conversiones de tipo en el ResultSet.");
+	TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_USER_MAPPER("Error técnico inesperado al mapear el usuario","Se presentó una excepción no controlada durante el proceso de mapeo de la entidad UserEntity. Verifique posibles valores nulos o conversiones de tipo en el ResultSet."),
+	
+	USER_ERROR_WHILE_REGISTERING_USER_NULL_USER("La información del usuario es obligatoria", "No es posible registrar al usuario, ya que no se envió la informacion"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_NULL_USER("UserDomain fue enviado como nulo", "No es posible registrar al usuario, ya que este fue enviado como null"),
+	USER_ERROR_WHILE_REGISTERING_USER_NULL_IDENTIFICATION_TYPE("La información del tipo de documento del usuario es obligatoria", "No es posible registrar al usuario, ya que no se envió la informacion de su tipo de documento"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_NULL_IDENTIFICATION_TYPE("identificationType fue enviado como nulo", "No es posible registrar al usuario, ya que su tipo de documento fue enviado como null"),
+	USER_ERROR_WHILE_REGISTERING_USER_NULL_CITY("La información de la ciudad del usuario es obligatoria", "No es posible registrar al usuario, ya que no se envió la informacion de su ciudad de residencia"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_NULL_CITY("residenceCity fue enviado como nulo", "No es posible registrar al usuario, ya que su ciudad de residencia fue enviado como null"),
+	USER_ERROR_WHILE_REGISTERING_USER_INVALID_IDENTIFICATION_NUMBER("El número de documento no es válido", "No es posible registrar al usuario, ya que el número de documento no cumple con los parametros estipulados"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_IDENTIFICATION_NUMBER("El número de documento no es válido", "No es posible registrar al usuario, ya que EL número de documento fue enviado vacío o supera los 25 caracteres"),
+	USER_ERROR_WHILE_REGISTERING_USER_INVALID_FIRST_NAME("El primer nombre del usuario no es válido", "No es posible registrar al usuario, ya que el primer nombre no cumple con los parametros estipulados"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_FIRST_NAME("El primer nombre del usuario no es válido", "No es posible registrar al usuario, ya que su primer nombre fue enviado vacío o supera los 20 caracteres"),
+	USER_ERROR_WHILE_REGISTERING_USER_INVALID_MIDDLE_NAME("El segundo nombre del usuario no es válido", "No es posible registrar al usuario, ya que su segundo nombre no cumple con los parametros estipulados"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_MIDDLE_NAME("El segundo nombre del usuario no es válido", "No es posible registrar al usuario, ya que su segundo nombre fue enviado vacío o supera los 20 caracteres"),
+	USER_ERROR_WHILE_REGISTERING_USER_INVALID_LAST_NAME("El primer apellido del usuario no es válido", "No es posible registrar al usuario, ya que el primer apellido del usuario no cumple con los parametros estipulados"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_lAST_NAME("El primer apellido del usuario no es válido", "No es posible registrar al usuario, ya que primer apellido del usuario fue enviado vacío o supera los 20 caracteres"),
+	USER_ERROR_WHILE_REGISTERING_USER_INVALID_SECOND_LAST_NAME("El segundo apellido del usuario no es válido", "No es posible registrar al usuario, ya que el segundo apellido del usuario no cumple con los parametros estipulados"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_SECOND_lAST_NAME("El segundo apellido del usuario no es válido", "No es posible registrar al usuario, ya que el segundo apellido del usuario fue enviado vacío o supera los 20 caracteres"),
+	USER_ERROR_WHILE_REGISTERING_USER_INVALID_EMAIL("El email del usuario no es válido", "No es posible registrar al usuario, ya que su email no cumple con los parametros estipulados"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_EMAIL("El email del usuario no es válido", "No es posible registrar al usuario, ya que su email fue enviado vacío, supera los 250 caracteres o no cumple el formato estipulado"),
+	USER_ERROR_WHILE_REGISTERING_USER_INVALID_CELL_PHONE_NUMBER("El teléfono del usuario no es válido", "No es posible registrar al usuario, ya que el teléfono del usuario no cumple con los parametros estipulados"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_CELL_PHONE_NUMBER("El teléfono del usuario no es válido", "No es posible registrar al usuario, ya que el teléfono del usuario fue enviado vacío, no cumple el formato estipulado o supera los 20 caracteres"),
+	USER_ERROR_WHILE_REGISTERING_USER_DUPLICATED_CELL_PHONE_NUMBER("El número de teléfono ya se encuentra registrado", "No es posible registrar al usuario, ya que el teléfono ingresado por el usuario ya se encuentra en uso"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_CELL_PHONE_NUMBER("El número de teléfono ya se encuentra registrado", "No es posible registrar al usuario, ya que el teléfono ingresado por el uusario ya se encuentra registrado dentro de la fuente de datos"),
+	USER_ERROR_WHILE_REGISTERING_USER_DUPLICATED_IDENTIFICATION("El tipo y número de documento del usuario ya se encuentra registrado", "No es posible registrar al usuario, ya que el tipo de documento y el número de documento ingresado por el usuario ya se encuentra en uso"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_IDENTIFICATION("El tipo y número de documento del usuario ya se encuentra registrado", "No es posible registrar al usuario, ya que el tipo y número de documento del usuario ya se encuentra registrado dentro de la fuente de datos"),
+	USER_ERROR_WHILE_REGISTERING_USER_DUPLICATED_EMAIL("El correo electrónico ya se encuentra registrado", "No es posible registrar al usuario, ya que el correo electrónico ingresado por el usuario ya se encuentra en uso"),
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_EMAIL("El correo electrónico ya se encuentra registrado", "No es posible registrar al usuario, ya que el correo electrónico ingresado por el uusario ya se encuentra registrado dentro de la fuente de datos");
+	
+
+	
 	
 	private String title;
 	private String content;
