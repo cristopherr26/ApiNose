@@ -26,7 +26,7 @@ public final class CountryDomain extends Domain {
 		setName(name);
 	}
 	
-	static CountryDomain getDefaultValue() {
+	protected static CountryDomain getDefaultValue() {
 		return new CountryDomain();
 	}
 	

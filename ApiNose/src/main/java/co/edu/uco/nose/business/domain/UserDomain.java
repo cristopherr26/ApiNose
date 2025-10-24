@@ -65,7 +65,7 @@ public final class UserDomain extends Domain {
 		setIdentificationNumber(identificationNumber);
 		setFirstName(firstName);
 		setMiddleName(middleName);
-		setLastName(secondLastName);
+		setLastName(lastName);
 		setSecondLastName(secondLastName);
 		setResidenceCity(residenceCity);
 		setEmail(email);
@@ -74,7 +74,7 @@ public final class UserDomain extends Domain {
 		setCellPhoneNumberConfirmed(cellPhoneNumberConfirmed);
 	}
 	
-	static UserDomain getDefaultValue() {
+	protected static UserDomain getDefaultValue() {
 		return new UserDomain();
 	}
 	

@@ -1,16 +1,19 @@
 package co.edu.uco.nose.data.dao.entity.postgresql;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import co.edu.uco.nose.crosscuting.exception.NoseException;
+import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
+import co.edu.uco.nose.crosscuting.helper.TextHelper;
+import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.entity.IdentificationTypeDAO;
 import co.edu.uco.nose.data.dao.entity.SqlConnection;
-import co.edu.uco.nose.data.dao.entity.mapper.IdentificationTypeMapper;
 import co.edu.uco.nose.entity.IdentificationTypeEntity;
 
 public final class IdentificationTypePostgreSqlDAO extends SqlConnection implements IdentificationTypeDAO {
@@ -21,85 +24,114 @@ public final class IdentificationTypePostgreSqlDAO extends SqlConnection impleme
 
 	@Override
 	public List<IdentificationTypeEntity> findAll() {
-		final var identificationTypes = new ArrayList<IdentificationTypeEntity>();
-		final var sql = new StringBuilder();
-		
-		sql.append("SELECT ");
-		sql.append("  t.id, ");
-		sql.append("  t.nombre ");
-		sql.append("  from \"Tipolidentificacion\" as t ");
-		
-		try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())) {
-			
-			
-			try(var resultSet = preparedStatement.executeQuery()){
-				
-				while (resultSet.next()) {
-					
-					var identificationType = IdentificationTypeMapper.map(resultSet);
-					
-					identificationTypes.add(identificationType);
-					
-				}
-				
-			}
-
-		} catch (final SQLException exception) {
-			var userMessage = MessagesEnum.USER_ERROR_SQL_EXCEPTION_FINDING_IDENTIFICATIONTYPE.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_EXCEPTION_FINDING_IDENTIFICATIONTYPE + exception.getMessage();
-			throw NoseException.create(exception, userMessage, technicalMessage);
-		}catch(final Exception exception) {
-			var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_IDENTIFICATIONTYPE.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_IDENTFICATIONTYPE.getContent() + exception.getMessage();
-			throw NoseException.create(exception, userMessage, technicalMessage);
-		}
-		
-		return identificationTypes;
+		return findByFilter(new IdentificationTypeEntity());
 	}
 
 
 	@Override
-	public List<IdentificationTypeEntity> findByFilter(IdentificationTypeEntity filterEntity) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<IdentificationTypeEntity> findByFilter(final IdentificationTypeEntity filterEntity) {
+		var parametersList = new ArrayList<Object>();
+		
+		var sql = createSentenceFindByFilter(filterEntity, parametersList);
+		
+		try (var preparedStatement = this.getConnection().prepareStatement(sql)){
+			
+			for (int index = 0; index < parametersList.size(); index++) {
+				preparedStatement.setObject(index+1, parametersList.get(index));
+			}
+			
+			return executeSentenceFindByFilter(preparedStatement);
+			
+		} catch (final NoseException exception) {
+			throw exception;
+		} catch (final SQLException exception) {
+	        var userMessage = MessagesEnum.USER_ERROR_SQL_EXCEPTION_FINDING_IDENTIFICATION_TYPE_WHILE_EXECUTION.getContent();
+	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_EXCEPTION_FINDING_IDENTIFICATION_TYPE_WHILE_PREPARATION.getContent() + exception.getMessage();
+	        throw NoseException.create(exception, userMessage, technicalMessage);
+	    } catch (final Exception exception) {
+	        var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_COUNTRY_WHILE_EXECUTION.getContent();
+	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_COUNTRY_WHILE_PREPARATION.getContent() + exception.getMessage();
+	        throw NoseException.create(exception, userMessage, technicalMessage);
+	    }
+	}
+	  
+
+
+	private String createSentenceFindByFilter(final IdentificationTypeEntity filterEntity, final List<Object> parametersList) {
+		
+		final var sql = new StringBuilder();
+		sql.append("SELECT ");
+		sql.append("  i.\"id\" as \"idTipoDocumento\", ");
+		sql.append("  i.\"nombre\" as \"nombreTipoDocumento\" ");
+		sql.append("  from \"TipoIdentificacion\" as i ");
+		
+	    
+	    createWhereClauseFindByFilter(sql, parametersList, filterEntity);
+	    
+	    return sql.toString();
 	}
 
-	@Override
-	public IdentificationTypeEntity findById(UUID id) {
-		var identificationType = new IdentificationTypeEntity();
-		final var sql = new StringBuilder();
+	private void createWhereClauseFindByFilter(final StringBuilder sql, final List<Object> parametersList,
+			final IdentificationTypeEntity filterEntity) {
 		
-		sql.append("SELECT ");
-		sql.append("  t.id, ");
-		sql.append("  t.nombre ");
-		sql.append("  from \"Tipolidentificacion\" as t ");
-		sql.append("  where t.id = ? ");
+		var filterEntityValidated = ObjectHelper.getDefault(filterEntity, new IdentificationTypeEntity());
+		final var conditions = new ArrayList<String>();
 		
-		try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())) {
-			
-			preparedStatement.setObject(1, id);
-			
-			try(var resultSet = preparedStatement.executeQuery()){
-				
-				if(resultSet.next()) {
-					
-					identificationType = IdentificationTypeMapper.map(resultSet);
-					
-				}
-				
-			}
+		addCondition(conditions, parametersList, !UUIDHelper.getUUIDHelper().isDefaultUUID(filterEntityValidated.getId()),
+		"i.\"id\" = ", filterEntityValidated.getId());
+		
+		
+		addCondition(conditions, parametersList, !TextHelper.isEmptyWithTrim(filterEntityValidated.getName()),
+		"i.\"nombre\" = ", filterEntityValidated.getName());
+		
+		
+		if(!conditions.isEmpty()) {
+			sql.append(" WHERE ");
+			sql.append(String.join(" AND ", conditions));
+		}
+	}
 
-		} catch (final SQLException exception) {
-			var userMessage = MessagesEnum.USER_ERROR_SQL_EXCEPTION_FINDING_IDENTIFICATIONTYPE.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_EXCEPTION_FINDING_IDENTIFICATIONTYPE + exception.getMessage();
-			throw NoseException.create(exception, userMessage, technicalMessage);
-		}catch(final Exception exception) {
-			var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_IDENTIFICATIONTYPE.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_IDENTFICATIONTYPE.getContent() + exception.getMessage();
-			throw NoseException.create(exception, userMessage, technicalMessage);
+	private void addCondition(final List<String> conditions, final List<Object> parametersList, final boolean condition,
+			final String clause, final Object value) {
+		
+		if(condition) {
+			conditions.add(clause + " ?");
+			parametersList.add(value);
 		}
 		
-		return identificationType;
+	}
+	
+	private List<IdentificationTypeEntity> executeSentenceFindByFilter(final PreparedStatement preparedStatement) {
+		
+		var identificationTypes = new ArrayList<IdentificationTypeEntity>();
+		
+		try (var resultSet = preparedStatement.executeQuery()) {
+
+	        while (resultSet.next()) {
+
+		            var identificationType = new IdentificationTypeEntity();
+		            identificationType.setId(UUIDHelper.getUUIDHelper().getFromString(resultSet.getString("idTipoDocumento")));	   
+		            identificationType.setName(resultSet.getString("nombreTipoDocumento"));
+		           
+		            identificationTypes.add(identificationType);
+		        }
+
+		    } catch (final SQLException exception) {
+		        var userMessage = MessagesEnum.USER_ERROR_SQL_EXCEPTION_FINDING_IDENTIFICATION_TYPE_WHILE_EXECUTION.getContent();
+		        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_EXCEPTION_FINDING_IDENTIFICATION_TYPE_WHILE_EXECUTION + exception.getMessage();
+		        throw NoseException.create(exception, userMessage, technicalMessage);
+		    } catch (final Exception exception) {
+		        var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_IDENTIFICATION_TYPE_WHILE_EXECUTION.getContent();
+		        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_IDENTIFICATION_TYPE_WHILE_EXECUTION.getContent() + exception.getMessage();
+		        throw NoseException.create(exception, userMessage, technicalMessage);
+		    }
+
+		    return identificationTypes;
+		}
+
+	@Override
+	public IdentificationTypeEntity findById(final UUID id) {
+		return findByFilter(new IdentificationTypeEntity(id)).stream().findFirst().orElse(new IdentificationTypeEntity());
 	}
 
 }

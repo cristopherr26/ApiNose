@@ -26,7 +26,7 @@ public final class IdentificationTypeDomain extends Domain {
 		setName(name);
 	}
 	
-	static IdentificationTypeDomain getDefaultValue() {
+	protected static IdentificationTypeDomain getDefaultValue() {
 		return new IdentificationTypeDomain();
 	}
 	

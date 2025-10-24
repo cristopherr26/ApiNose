@@ -29,7 +29,7 @@ public final class CityDomain extends Domain{
 		setState(state);
 	}
 	
-	static CityDomain getDefaultValue() {
+	protected static CityDomain getDefaultValue() {
 		return new CityDomain();
 	}
 	

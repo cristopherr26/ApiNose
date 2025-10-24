@@ -29,7 +29,7 @@ public final class StateDomain extends Domain {
 		setCountry(country);
 	}
 	
-	static StateDomain getDefaultValue() {
+	protected static StateDomain getDefaultValue() {
 		return new StateDomain();
 	}
 	
