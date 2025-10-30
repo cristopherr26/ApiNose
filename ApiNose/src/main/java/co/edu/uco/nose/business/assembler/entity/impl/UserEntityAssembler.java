@@ -1,6 +1,10 @@
 package co.edu.uco.nose.business.assembler.entity.impl;
 
 import static co.edu.uco.nose.business.assembler.entity.impl.IdentificationTypeEntityAssembler.getIdentificationTypeEntityAssembler;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static co.edu.uco.nose.business.assembler.entity.impl.CityEntityAssembler.getCityEntityAssembler;
 
 import co.edu.uco.nose.business.assembler.entity.EntityAssembler;
@@ -42,4 +46,15 @@ public final class UserEntityAssembler implements EntityAssembler<UserEntity, Us
 				entityTmp.isEmailConfirmed(), entityTmp.isCellPhoneNumberConfirmed());
 	}
 
+	@Override
+	public List<UserDomain> toDomain(final List<UserEntity> entityList) {
+		var userDomainList = new ArrayList<UserDomain>();
+		
+		for (var userEntity : entityList) {
+			userDomainList.add(toDomain(userEntity));
+		}
+		return userDomainList;
+	}
 }
+
+

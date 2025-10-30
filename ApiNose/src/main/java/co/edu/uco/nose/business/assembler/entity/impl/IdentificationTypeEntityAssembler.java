@@ -1,5 +1,7 @@
 package co.edu.uco.nose.business.assembler.entity.impl;
 
+import java.util.List;
+
 import co.edu.uco.nose.business.assembler.entity.EntityAssembler;
 import co.edu.uco.nose.business.domain.IdentificationTypeDomain;
 import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
@@ -27,6 +29,12 @@ public final class IdentificationTypeEntityAssembler implements EntityAssembler<
 	public IdentificationTypeDomain toDomain(final IdentificationTypeEntity entity) {
 		var entityTmp = ObjectHelper.getDefault(entity, new IdentificationTypeEntity());
 		return new IdentificationTypeDomain(entityTmp.getId(), entityTmp.getName());
+	}
+
+	@Override
+	public List<IdentificationTypeDomain> toDomain(List<IdentificationTypeEntity> entityList) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

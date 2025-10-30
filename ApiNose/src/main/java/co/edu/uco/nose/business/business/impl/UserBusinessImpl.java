@@ -24,7 +24,7 @@ public final class UserBusinessImpl implements UserBusiness {
 	}
 
 	@Override
-	public void registerNewUserInformation(UserDomain userDomain) {
+	public void registerNewUserInformation(final UserDomain userDomain) {
 		
 		//1. Validar que la informacion sea consistente a nivel de tipo de dato, longitud, oblatoriedad
 		//2. Validar que no exista otro usuario con el mismo tipo y número de documento
@@ -161,8 +161,9 @@ public final class UserBusinessImpl implements UserBusiness {
 
 
 	@Override
-	public void dropUserInformation(UUID id) {
-		// TODO Auto-generated method stub
+	public void dropUserInformation(final UUID id) {
+		
+		daoFactory.getUserDAO().delete(id);
 		
 	}
 
@@ -174,8 +175,11 @@ public final class UserBusinessImpl implements UserBusiness {
 
 	@Override
 	public List<UserDomain> findAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		var userEntities = daoFactory.getUserDAO().findAll();
+		
+		return UserEntityAssembler.getUserEntityAssembler().toDomain(userEntities);
+		
 	}
 
 	@Override
@@ -185,9 +189,11 @@ public final class UserBusinessImpl implements UserBusiness {
 	}
 
 	@Override
-	public UserDomain findUserById(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserDomain findUserById(final UUID id) {
+		
+		var userEntity = daoFactory.getUserDAO().findById(id);
+		
+		return UserEntityAssembler.getUserEntityAssembler().toDomain(userEntity);
 	}
 
 	@Override

@@ -267,7 +267,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		SqlConnectionHelper.ensureTransactionIsStarted(getConnection());
 		
 		final var sql= new StringBuilder();
-		sql.append("UPDATE Usuario ");
+		sql.append("UPDATE \"Usuario\" ");
 		sql.append("SET tipoIdentificacion=?");
 		sql.append("primerNombre=?");
 		sql.append("segundoNombre=?");
@@ -314,7 +314,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		SqlConnectionHelper.ensureTransactionIsStarted(getConnection());
 		
 		final var sql= new StringBuilder();
-		sql.append("DELETE FROM Usuario ");
+		sql.append("DELETE FROM \"Usuario\" ");
 		sql.append("WHERE id=?");
 		try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())) {
 			

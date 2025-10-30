@@ -92,9 +92,9 @@ public enum MessagesEnum {
 	USER_ERROR_WHILE_REGISTERING_USER_DUPLICATED_IDENTIFICATION("El tipo y número de documento del usuario ya se encuentra registrado", "No es posible registrar al usuario, ya que el tipo de documento y el número de documento ingresado por el usuario ya se encuentra en uso"),
 	TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_IDENTIFICATION("El tipo y número de documento del usuario ya se encuentra registrado", "No es posible registrar al usuario, ya que el tipo y número de documento del usuario ya se encuentra registrado dentro de la fuente de datos"),
 	USER_ERROR_WHILE_REGISTERING_USER_DUPLICATED_EMAIL("El correo electrónico ya se encuentra registrado", "No es posible registrar al usuario, ya que el correo electrónico ingresado por el usuario ya se encuentra en uso"),
-	TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_EMAIL("El correo electrónico ya se encuentra registrado", "No es posible registrar al usuario, ya que el correo electrónico ingresado por el uusario ya se encuentra registrado dentro de la fuente de datos");
-	
-
+	TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_EMAIL("El correo electrónico ya se encuentra registrado", "No es posible registrar al usuario, ya que el correo electrónico ingresado por el uusario ya se encuentra registrado dentro de la fuente de datos"),
+	USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER("Error inesperado durante la consulta de la información de un usuario", "Se ha presentado un problema inesperado durante la operación de consulta de la información de un usuario. Por favor intente de nuevo y si el problema persiste contacte al administrador del sistema."),
+	TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER("Error inesperado durante la operación de consulta de la información de un usuario", "Se ha presentado un problema inesperado durante la de la operación de consulta de la información de un usuario. No fue una SQLException, sino un error no controlado en el proceso de consulta.");
 	
 	
 	private String title;

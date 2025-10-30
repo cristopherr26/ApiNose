@@ -2,6 +2,8 @@ package co.edu.uco.nose.business.assembler.entity.impl;
 
 import static co.edu.uco.nose.business.assembler.entity.impl.StateEntityAssembler.getStateEntityAssembler;
 
+import java.util.List;
+
 import co.edu.uco.nose.business.assembler.entity.EntityAssembler;
 import co.edu.uco.nose.business.domain.CityDomain;
 import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
@@ -31,6 +33,12 @@ public final class CityEntityAssembler implements EntityAssembler<CityEntity, Ci
 		var entityTmp = ObjectHelper.getDefault(entity, new CityEntity());
 		var stateDomainTmp = getStateEntityAssembler().toDomain(entityTmp.getState());
 		return new CityDomain(entityTmp.getId(), entityTmp.getName(), stateDomainTmp);
+	}
+
+	@Override
+	public List<CityDomain> toDomain(List<CityEntity> entityList) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

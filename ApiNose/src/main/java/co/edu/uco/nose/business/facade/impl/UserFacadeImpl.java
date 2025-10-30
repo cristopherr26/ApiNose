@@ -48,33 +48,126 @@ public final class UserFacadeImpl implements UserFacade{
 	}
 
 	@Override
-	public void dropUserInformation(UUID id) {
-		// TODO Auto-generated method stub
+	public void dropUserInformation(final UUID id) {
+		var daoFactory = DAOFactory.getFactory();
+		var business = new UserBusinessImpl(daoFactory);
+		
+		try {
+			
+			daoFactory.initTransaction();
+			
+			business.dropUserInformation(id);
+			
+			daoFactory.commitTransaction();
+			
+		} catch (final NoseException exception) {
+			daoFactory.rollbackTransaction();
+			throw exception;
+		} catch (final Exception exception) {
+			daoFactory.rollbackTransaction();
+			
+			var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_DELETING_USER.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_DELETING_USER.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
+			
+		} finally {
+			daoFactory.closeConnection();
+		}
 		
 	}
 
 	@Override
-	public void updateUserInformation(UUID id, UserDto userDto) {
-		// TODO Auto-generated method stub
+	public void updateUserInformation(final UUID id, final UserDto userDto) {
+		var daoFactory = DAOFactory.getFactory();
+		var business = new UserBusinessImpl(daoFactory);
+		
+		try {
+			
+			daoFactory.initTransaction();
+			
+			var userDomain = UserDTOAssembler.getUserDTOAssembler().toDomain(userDto);
+			
+			business.updateUserInformation(id, userDomain);
+			
+			daoFactory.commitTransaction();
+			
+		} catch (final NoseException exception) {
+			daoFactory.rollbackTransaction();
+			throw exception;
+		} catch (final Exception exception) {
+			daoFactory.rollbackTransaction();
+			
+			var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_UPDATING_USER.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_UPDATING_USER.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
+			
+		} finally {
+			daoFactory.closeConnection();
+		}
 		
 	}
 
 	@Override
 	public List<UserDto> findAllUsers() {
+
+		var daoFactory = DAOFactory.getFactory();
+		var business = new UserBusinessImpl(daoFactory);
+		
+		try {
+			
+			daoFactory.initTransaction();
+			
+			var userDomainList = business.findAllUsers();
+			
+			return UserDTOAssembler.getUserDTOAssembler().toDTO(userDomainList);
+			
+			
+		} catch (final NoseException exception) {
+			throw exception;
+		} catch (final Exception exception) {
+			
+			var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
+			
+		} finally {
+			daoFactory.closeConnection();
+		}
+		
+		
+	}
+
+	@Override
+	public List<UserDto> findUserByFilter(final UserDto userFilters) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<UserDto> findUserByFilter(UserDto userFilters) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public UserDto findUserById(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserDto findUserById(final UUID id) {
+		var daoFactory = DAOFactory.getFactory();
+		var business = new UserBusinessImpl(daoFactory);
+		
+		try {
+			
+			daoFactory.initTransaction();
+			
+			var userDomain = business.findUserById(id);
+			
+			return UserDTOAssembler.getUserDTOAssembler().toDTO(userDomain);
+			
+				
+		} catch (final NoseException exception) {
+			throw exception;
+		} catch (final Exception exception) {
+			
+			var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
+			
+		} finally {
+			daoFactory.closeConnection();
+		}
 	}
 
 	@Override
