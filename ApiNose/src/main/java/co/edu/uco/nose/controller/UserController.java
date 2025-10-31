@@ -84,9 +84,31 @@ public class UserController {
 	}
 	
 	@PutMapping("/{id}")
-	public String updateUserInformation (@PathVariable UUID id, @RequestBody UserDto user) {
+	public ResponseEntity<Response<UserDto>> updateUserInformation (@PathVariable UUID id, @RequestBody UserDto user) {
 		
-		return "UPDATE: User updated!";
+		Response<UserDto> responseObjectData = Response.createSuccededResponse();
+		HttpStatusCode responseStatusCode = HttpStatus.OK;
+		
+	try {
+		var facade = new UserFacadeImpl();
+		facade.updateUserInformation(id, user);
+		responseObjectData.addMessage(" User updated sucesfully");
+		
+		
+	} catch (final NoseException exception) {
+		responseObjectData = Response.createFailedResponse();
+		responseObjectData.addMessage(exception.getUserMessage());
+		responseStatusCode = HttpStatus.BAD_REQUEST;
+		exception.printStackTrace();
+	} catch( Exception exception) {
+		var userMessage = "Unexpected error";
+		responseObjectData = Response.createFailedResponse();
+		responseObjectData.addMessage(userMessage);
+		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+		exception.printStackTrace();
+	}
+		
+		return new ResponseEntity<>(responseObjectData, responseStatusCode);
 		
 	}
 	
@@ -119,7 +141,7 @@ public class UserController {
 		
 	}
 	
-	/*@GetMapping
+	@GetMapping("/{id}")
 	public ResponseEntity<Response<UserDto>> findUserById (@PathVariable UUID id) {
 		
 		Response<UserDto> responseObjectData = Response.createSuccededResponse();
@@ -146,7 +168,36 @@ public class UserController {
 		
 		return new ResponseEntity<>(responseObjectData, responseStatusCode);
 		
-	}*/
+	}
+	
+	@PostMapping("/{filter}")
+	public ResponseEntity<Response<UserDto>> findUserByFilter (@RequestBody UserDto userFilters) {
+		
+		Response<UserDto> responseObjectData = Response.createSuccededResponse();
+		HttpStatusCode responseStatusCode = HttpStatus.OK;
+		
+	try {
+		var facade = new UserFacadeImpl();
+		responseObjectData.setData(facade.findUserByFilter(userFilters));
+		responseObjectData.addMessage("Users filtered succesfully");
+		
+		
+	} catch (final NoseException exception) {
+		responseObjectData = Response.createFailedResponse();
+		responseObjectData.addMessage(exception.getUserMessage());
+		responseStatusCode = HttpStatus.BAD_REQUEST;
+		exception.printStackTrace();
+	} catch( Exception exception) {
+		var userMessage = "Unexpected error";
+		responseObjectData = Response.createFailedResponse();
+		responseObjectData.addMessage(userMessage);
+		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+		exception.printStackTrace();
+	}
+		
+		return new ResponseEntity<>(responseObjectData, responseStatusCode);
+		
+	}
 	
 
 }

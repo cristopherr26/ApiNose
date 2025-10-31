@@ -119,7 +119,7 @@ public final class UserBusinessImpl implements UserBusiness {
 		
 	}
 	
-	private void validateDuplicatedUser(UserDomain userDomain) {
+	private void validateDuplicatedUser(final UserDomain userDomain) {
 
 	    var userEntityFilter = UserEntityAssembler.getUserEntityAssembler().toEntity(userDomain);
 
@@ -168,10 +168,63 @@ public final class UserBusinessImpl implements UserBusiness {
 	}
 
 	@Override
-	public void updateUserInformation(UUID id, UserDomain userDomain) {
-		// TODO Auto-generated method stub
+	public void updateUserInformation(final UUID id, final UserDomain userDomain) {
+		
+		daoFactory.getUserDAO().findById(id);
+		
+		validateUserData(userDomain);
+		
+		validateDuplicatedUserOnUpdate(id, userDomain);
+		
+		
+		var userEntity = UserEntityAssembler.getUserEntityAssembler().toEntity(userDomain);
+		
+		userEntity.setId(id);
+		
+		daoFactory.getUserDAO().update(userEntity);
 		
 	}
+	
+	private void validateDuplicatedUserOnUpdate(final UUID id, final UserDomain userDomain) {
+
+	    var userEntityFilter = UserEntityAssembler.getUserEntityAssembler().toEntity(userDomain);
+	    var userDAO = daoFactory.getUserDAO();
+
+	    var filterByIdentification = new UserEntity();
+	    filterByIdentification.setIdentificationType(userEntityFilter.getIdentificationType());
+	    filterByIdentification.setIdentificationNumber(userEntityFilter.getIdentificationNumber());
+
+	    var existingById = userDAO.findByFilter(filterByIdentification);
+	    if (!existingById.isEmpty() && !existingById.get(0).getId().equals(id)) {
+	        var userMessage = MessagesEnum.USER_ERROR_WHILE_UPDATING_USER_DUPLICATED_IDENTIFICATION.getContent();
+	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_UPDATING_USER_DUPLICATED_IDENTIFICATION.getContent();
+	        throw NoseException.create(userMessage, technicalMessage);
+	    }
+
+	    var filterByEmail = new UserEntity();
+	    filterByEmail.setEmail(userEntityFilter.getEmail());
+
+	    var existingByEmail = userDAO.findByFilter(filterByEmail);
+	    if (!existingByEmail.isEmpty() && !existingByEmail.get(0).getId().equals(id)) {
+	        var userMessage = MessagesEnum.USER_ERROR_WHILE_UPDATING_USER_DUPLICATED_EMAIL.getContent();
+	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_UPDATING_USER_DUPLICATED_EMAIL.getContent();
+	        throw NoseException.create(userMessage, technicalMessage);
+	    }
+
+	    var filterByPhone = new UserEntity();
+	    filterByPhone.setCellPhoneNumber(userEntityFilter.getCellPhoneNumber());
+
+	    var existingByPhone = userDAO.findByFilter(filterByPhone);
+	    if (!existingByPhone.isEmpty() && !existingByPhone.get(0).getId().equals(id)) {
+	        var userMessage = MessagesEnum.USER_ERROR_WHILE_UPDATING_USER_DUPLICATED_CELL_PHONE_NUMBER.getContent();
+	        var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_UPDATING_USER_DUPLICATED_CELL_PHONE_NUMBER.getContent();
+	        throw NoseException.create(userMessage, technicalMessage);
+	    }
+	}
+
+	
+	
+
 
 	@Override
 	public List<UserDomain> findAllUsers() {
@@ -184,8 +237,12 @@ public final class UserBusinessImpl implements UserBusiness {
 
 	@Override
 	public List<UserDomain> findUserByFilter(UserDomain userFilters) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		var userFiltersEntity = UserEntityAssembler.getUserEntityAssembler().toEntity(userFilters);
+		
+		var userEntites = daoFactory.getUserDAO().findByFilter(userFiltersEntity);
+		
+		return UserEntityAssembler.getUserEntityAssembler().toDomain(userEntites);
 	}
 
 	@Override

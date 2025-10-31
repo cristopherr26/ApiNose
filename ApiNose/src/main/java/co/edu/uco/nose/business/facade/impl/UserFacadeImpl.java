@@ -139,8 +139,31 @@ public final class UserFacadeImpl implements UserFacade{
 
 	@Override
 	public List<UserDto> findUserByFilter(final UserDto userFilters) {
-		// TODO Auto-generated method stub
-		return null;
+		var daoFactory = DAOFactory.getFactory();
+		var business = new UserBusinessImpl(daoFactory);
+		
+		try {
+			
+			daoFactory.initTransaction();
+			
+			var userDomain = UserDTOAssembler.getUserDTOAssembler().toDomain(userFilters);
+			
+			return UserDTOAssembler.getUserDTOAssembler().toDTO(business.findUserByFilter(userDomain));
+			
+			
+			
+			
+		} catch (final NoseException exception) {
+			throw exception;
+		} catch (final Exception exception) {
+			
+			var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER.getContent();
+			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_UNEXPECTED_EXCEPTION_FINDING_USER.getContent();
+			throw NoseException.create(exception, userMessage, technicalMessage);
+			
+		} finally {
+			daoFactory.closeConnection();
+		}
 	}
 
 	@Override
