@@ -266,19 +266,19 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		
 		SqlConnectionHelper.ensureTransactionIsStarted(getConnection());
 		
-		final var sql= new StringBuilder();
+		var sql = new StringBuilder();
 		sql.append("UPDATE \"Usuario\" ");
-		sql.append("SET tipoIdentificacion=?");
-		sql.append("primerNombre=?");
-		sql.append("segundoNombre=?");
-		sql.append("primerApellido=?");
-		sql.append("segundoApellido=?");
-		sql.append("ciudadResidencia=?");
-		sql.append("correoElectronico=?");
-		sql.append("numeroTelefonoMovil=?");
-		sql.append("correoElectronicoConfirmado=?");
-		sql.append("numeroTelefonoMovilConfirmado=?");
-		sql.append("WHERE id=?");
+		sql.append("SET \"tipoIdentificacion\" = ?, ");
+		sql.append("\"primerNombre\" = ?, ");
+		sql.append("\"segundoNombre\" = ?, ");
+		sql.append("\"primerApellido\" = ?, ");
+		sql.append("\"segundoApellido\" = ?, ");
+		sql.append("\"ciudadResidencia\" = ?, ");
+		sql.append("\"correoElectronico\" = ?, ");
+		sql.append("\"numeroTelefonoMovil\" = ?, ");
+		sql.append("\"correoElectronicoConfirmado\" = ?, ");
+		sql.append("\"numeroTelefonoMovilConfirmado\" = ? ");
+		sql.append("WHERE \"id\" = ?;");
 		
 	try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())) {
 				
@@ -292,6 +292,7 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 		preparedStatement.setString(8, entity.getCellPhoneNumber());
 		preparedStatement.setBoolean(9, entity.isEmailConfirmed());
 		preparedStatement.setBoolean(10, entity.isCellPhoneNumberConfirmed());
+		preparedStatement.setObject(11, entity.getId());
 				
 		preparedStatement.executeUpdate();
 	
