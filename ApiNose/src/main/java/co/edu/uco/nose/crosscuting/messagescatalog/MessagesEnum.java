@@ -100,7 +100,71 @@ public enum MessagesEnum {
 	USER_ERROR_WHILE_UPDATING_USER_DUPLICATED_IDENTIFICATION("El tipo y número de documento del usuario ya se encuentra registrado", "No es posible actualizar la información al usuario, ya que el tipo de documento y el número de documento ingresado por el usuario ya se encuentra en uso"),
 	TECHNICAL_ERROR_WHILE_UPDATING_USER_DUPLICATED_IDENTIFICATION("El tipo y número de documento del usuario ya se encuentra registrado", "No es posible actualizar la información al usuario, ya que el tipo y número de documento del usuario ya se encuentra registrado dentro de la fuente de datos"),
 	USER_ERROR_WHILE_UPDATING_USER_DUPLICATED_EMAIL("El correo electrónico ya se encuentra registrado", "No es posible actualizar la información al usuario, ya que el correo electrónico ingresado por el usuario ya se encuentra en uso"),
-	TECHNICAL_ERROR_WHILE_UPDATING_USER_DUPLICATED_EMAIL("El correo electrónico ya se encuentra registrado", "No es posible actualizar la información al usuario, ya que el correo electrónico ingresado por el uusario ya se encuentra registrado dentro de la fuente de datos");
+	TECHNICAL_ERROR_WHILE_UPDATING_USER_DUPLICATED_EMAIL("El correo electrónico ya se encuentra registrado", "No es posible actualizar la información al usuario, ya que el correo electrónico ingresado por el uusario ya se encuentra registrado dentro de la fuente de datos"),
+
+	USER_SUCESSFULLY_REGISTERED("El Usuario fue registrado con éxito", "El Registro del usuario se llevo a cabo con éxito"),
+	USER_SUCESSFULLY_UPDATED("El Usuario fue actualizado con éxito", "La actualización del usuario se llevo a cabo con éxito"),
+	USER_SUCESSFULLY_DELETED("El Usuario fue eliminado con éxito", "La eliminación del usuario se llevo a cabo con éxito"),
+	USER_SUCESSFULLY_FOUND("El Usuario O los usuarios fueron consultados con éxito", "La consulta del usuario o los usuarios se llevo a cabo con éxito"),
+	
+	
+	USER_ERROR_TRYING_TO_MAKE_AN_OPERATION("Error tratando de llevar a cabo la operación", "Se ha presentado un error tratando de llevar a cabo la operación esperada"),
+	TECHNICAL_ERROR_VALUE_IS_NOT_PRESENT("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla StringIsPresentRule"),
+	TECHNICAL_ERROR_STRING_LENGTH_VALUE("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla StringLengthValueIsValidRule"),
+	TECHNICAL_ERROR_STRING_FORMAT_VALUE("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla StringFormatValueIsValidRule"),
+	TECHNICAL_ERROR_WRONG_STRING_LENGTH_VALUE("No fueron ingresados todos los parametros", "Se requerían 5 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla StringLengthValueIsValidRule"),
+	TECHNICAL_ERROR_WRONG_STRING_FORMAT_VALUE("No fueron ingresados todos los parametros", "Se requerían 4 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla StringFormatValueIsValidRule"),
+	
+	TECHNICAL_ERROR_VALUE_UUID_IS_NOT_PRESENT("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla UuidValueIsPresentRule"),
+	TECHNICAL_ERROR_WRONG_UUID_LENGTH_IS_NOT_PRESENT("No fueron ingresados todos los parametros", "Se requerían 2 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla UuidValueIsPresentRule"),
+	TECHNICAL_ERROR_UUID_IS_DEFAULT("UUID por defecto", "La operacion no pudo ser llevada a cabo, ya que en el el siguiente dato fue ingresado el uuid por defecto: "),
+	
+	TECHNICAL_ERROR_VALUE_USER_IS_NOT_PRESENT("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar el validator ValidateDataUserConsistencyForRegisterNewInformation"),
+	TECHNICAL_ERROR_WRONG_USER_LENGTH_VALUE_IS_NOT_PRESENT("No fueron ingresados todos los parametros", "Se requería 1 parametro y llegó una cantidad menor a esta requerida para ejecutar el validator ValidateDataUserConsistencyForRegisterNewInformation"),
+
+	
+	TECHNICAL_ERROR_VALUE_UUID_IS_NOT_DEFAULT("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla IdValueIsNotDefaultValueRule"),
+	TECHNICAL_ERROR_WRONG_UUID_LENGTH_IS_NOT_DEFAULT("No fueron ingresados todos los parametros", "Se requerían 2 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla IdValueIsNotDefaultValueRule"),
+
+	TECHNICAL_ERROR_WRONG_STRING_LENGTH_IS_PRESENT("No fueron ingresados todos los parametros", "Se requerían 3 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla StringIsPresentRule"),
+	USER_ERROR_WRONG_LENGTH("El dato ingresado tiene una longitud incorrecta",  "El siguiente dato debe tener una longituda de: " ),
+	TECHNICAL_ERROR_WRONG_LENGTH("El dato ingresado tiene una longitud incorrecta", "La regla StringLengthValueIsValidRule fallo ya que el siguiente dato debe tener la siguiente longitud: "),
+	USER_ERROR_INCOMPLETE_PARAMETERS("No se enviaron todos los datos necesarios", "El dato es necesario para llevar a cabo la operación: "),
+	TECHNICAL_ERROR_INCOMPLETE_PARAMETERS("No se enviaron todos los datos necesarios", "La regla StringValueIsPresent falló porque el siguiente dato requerido para llevar a cabo la operación está vacío: "),
+	
+	USER_ERROR_WRONG_FORMAT("El dato ingresado tiene un formato incorrecto",  "El siguiente dato NO cumple con los caracteres estipulados para este campo: " ),
+	TECHNICAL_ERROR_WRONG_FORMAT("El dato ingresado tiene un formato incorrecto", "La regla StringFormatValueIsValidRule fallo ya que el siguiente dato debe contener solo los siguientes caracteres:  "),
+	
+	TECHNICAL_ERROR_VALUE_IS_NOT_PRESENT_IDENTIFICATION_TYPE("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla IdentificationTypeExistsByIdRule"),
+	TECHNICAL_ERROR_WRONG_IDENTIFICATION_TYPE_LENGTH_VALUE("No fueron ingresados todos los parametros", "Se requerían 2 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla IdentificationTypeExistsByIdRule"),
+	USER_ERROR_IDENTIFICATION_TYPE_DOES_NOT_EXITS("El tipo de documento no existe", "El tipo de documento ingresado no existe"),
+	TECHNICAL_ERROR_IDENTIFICATION_TYPE_DOES_NOT_EXITS("El tipo de documento no existe", "El tipo de documento con el siguiente id no existe: "),
+	
+	TECHNICAL_ERROR_VALUE_IS_NOT_PRESENT_CITY("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla CityExistsByIdRule"),
+	TECHNICAL_ERROR_WRONG_CITY_LENGTH_VALUE("No fueron ingresados todos los parametros", "Se requerían 2 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla CityExistsByIdRule"),
+	USER_ERROR_CITY_DOES_NOT_EXITS("La ciudad no existe", "La ciudad ingresada no existe"),
+	TECHNICAL_ERROR_CITY_DOES_NOT_EXITS("La ciudad no existe", "La ciudad con el siguiente id no existe: "),
+	
+	TECHNICAL_ERROR_VALUE_IS_NOT_PRESENT_USER("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla UserExistsByIdRule"),
+	TECHNICAL_ERROR_WRONG_USER_LENGTH_VALUE("No fueron ingresados todos los parametros", "Se requerían 2 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla UserExistsByIdRule"),
+	USER_ERROR_USER_DOES_NOT_EXITS("El usuario no existe", "El usuario ingresada no existe"),
+	TECHNICAL_ERROR_USER_DOES_NOT_EXITS("El usuario no existe", "El usuario con el siguiente id no existe: "),
+	
+	TECHNICAL_ERROR_VALUE_USER_DOES_NOT_EXISTS_BY_IDENTIFICATION("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla UserDoesNotExistsWithSameIdtypeAndNumberRule"),
+	TECHNICAL_ERROR_WRONG_USER_LENGTH_VALUE_USER_DOES_NOT_EXISTS_BY_IDENTIFICATION("No fueron ingresados todos los parametros", "Se requerían 3 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla UserDoesNotExistsWithSameIdtypeAndNumberRule"),
+	USER_ERROR_USER_DOES_EXISTS_BY_IDENTIFICATION("Ya hay un usuario registrado con ese tipo y número de identificación", "No es posible llevar a cabo la operación, ya que ya existe un usuario con el mismo tipo y número de identificación"),
+	TECHNICAL_ERROR_USER_DOES_EXISTS_BY_IDENTIFICATION("Ya hay un usuario registrado con ese tipo y número de identificación", "No es posible llevar a cabo la operación, ya que ya existe un usuario dentro de la fuente de datos con el mismo tipo y número de identificación "),
+	
+	TECHNICAL_ERROR_VALUE_USER_DOES_NOT_EXISTS_BY_EMAIL("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla UserEmailDoesNotExistsRule"),
+	TECHNICAL_ERROR_WRONG_USER_LENGTH_VALUE_USER_DOES_NOT_EXISTS_BY_EMAIL("No fueron ingresados todos los parametros", "Se requerían 2 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla UserEmailDoesNotExistsRule"),
+	USER_ERROR_USER_DOES_EXISTS_BY_EMAIL("Ya hay un usuario registrado con ese email", "No es posible llevar a cabo la operación, ya que ya existe un usuario con el email"),
+	TECHNICAL_ERROR_USER_DOES_EXISTS_BY_EMAIL("Ya hay un usuario registrado con ese email", "No es posible llevar a cabo la operación, ya que ya existe un usuario dentro de la fuente de datos con el mismo email "),
+	
+	TECHNICAL_ERROR_VALUE_USER_DOES_NOT_EXISTS_BY_MOBILE_NUMBER("Error tratando de llevar a cabo la operación", "No se recibieron los parametros requeridos para ejecutar la regla UserEmailDoesNotExistsRule"),
+	TECHNICAL_ERROR_WRONG_USER_LENGTH_VALUE_USER_DOES_NOT_EXISTS_BY_MOBILE_NUMBER("No fueron ingresados todos los parametros", "Se requerían 2 parametros y llegó una cantidad menor a esta requeridos para ejecutar la regla UserEmailDoesNotExistsRule"),
+	USER_ERROR_USER_DOES_EXISTS_BY_MOBILE_NUMBER("Ya hay un usuario registrado con ese número de teléfono", "No es posible llevar a cabo la operación, ya que ya existe un usuario con el mismo  número de teléfono"),
+	TECHNICAL_ERROR_USER_DOES_EXISTS_BY_MOBILE_NUMBER("Ya hay un usuario registrado con ese  número de teléfono", "No es posible llevar a cabo la operación, ya que ya existe un usuario dentro de la fuente de datos con el mismo  número de teléfono");
+	
 	
 	
 	private String title;

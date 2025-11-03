@@ -16,14 +16,14 @@ public class TestUserRegistration {
 		var user = new UserDto();
 		
 		user.setIdentificationType(new IdentificationTypeDto(UUID.fromString("11111111-1111-1111-1111-111111111111")));
-        user.setIdentificationNumber("1036254051");
-        user.setFirstName("Cristopher");
-        user.setMiddleName("ospina");
-        user.setLastName("Arroyave");
-        user.setSecondLastName("Rios");
+        user.setIdentificationNumber("1032432084");
+        user.setFirstName("Elkin");
+        user.setMiddleName("Rodrigo");
+        user.setLastName("Ospina");
+        user.setSecondLastName("Duque");
         user.setResidenceCity(new CityDto(UUID.fromString("c3333333-3333-3333-3333-333333333333")));
-        user.setEmail("Critosp2645@example.com");
-        user.setCellPhoneNumber("3117732802456");
+        user.setEmail("Elroosduexample.com");
+        user.setCellPhoneNumber("561264156");
         user.setEmailConfirmed(false);
         user.setCellPhoneNumberConfirmed(false);
 		

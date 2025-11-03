@@ -5,10 +5,14 @@ import java.util.UUID;
 
 import co.edu.uco.nose.business.assembler.entity.impl.UserEntityAssembler;
 import co.edu.uco.nose.business.business.UserBusiness;
+import co.edu.uco.nose.business.business.validator.city.ValidateCityExistsById;
+import co.edu.uco.nose.business.business.validator.identificationtype.ValidateIdTypeExistsById;
+import co.edu.uco.nose.business.business.validator.user.ValidateDataUserConsistencyForRegisterNewInformation;
+import co.edu.uco.nose.business.business.validator.user.ValidateUserDoesNotExistsWithSameTypeAndNumber;
+import co.edu.uco.nose.business.business.validator.user.ValidateUserEmailDoesNotExists;
+import co.edu.uco.nose.business.business.validator.user.ValidateUserMobilePhoneDoesNotExists;
 import co.edu.uco.nose.business.domain.UserDomain;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
-import co.edu.uco.nose.crosscuting.helper.ObjectHelper;
-import co.edu.uco.nose.crosscuting.helper.TextHelper;
 import co.edu.uco.nose.crosscuting.helper.UUIDHelper;
 import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.factory.DAOFactory;
@@ -25,139 +29,40 @@ public final class UserBusinessImpl implements UserBusiness {
 
 	@Override
 	public void registerNewUserInformation(final UserDomain userDomain) {
+				
+		ValidateDataUserConsistencyForRegisterNewInformation.executeValidation(userDomain);
 		
-		//1. Validar que la informacion sea consistente a nivel de tipo de dato, longitud, oblatoriedad
-		//2. Validar que no exista otro usuario con el mismo tipo y número de documento
-		//3. Validar que no exista previamente un usuario con el mismo email
-		//4. Validar que no exista previamente un usuario con el mismo número de teléfono celular
-		//5. Generar un identificador para el nuevo usuario, asegurando de que no exista previamente
+		ValidateIdTypeExistsById.executeValidation(userDomain.getIdentificationType().getId(), daoFactory);
 		
-		validateUserData(userDomain);
-		validateDuplicatedUser(userDomain);
+		ValidateCityExistsById.executeValidation(userDomain.getResidenceCity().getId(), daoFactory);
+				
+		ValidateUserDoesNotExistsWithSameTypeAndNumber.executeValidation(userDomain.getIdentificationType(), userDomain.getIdentificationNumber(), daoFactory);
 		
-		var id = UUIDHelper.getUUIDHelper().generateNewUUID();
-		while (!UUIDHelper.getUUIDHelper().isDefaultUUID(daoFactory.getUserDAO().findById(id).getId())) {
-		        id = UUIDHelper.getUUIDHelper().generateNewUUID();
-		 }
-		 
+		ValidateUserEmailDoesNotExists.executeValidation(userDomain.getEmail(), daoFactory);
+		
+		ValidateUserMobilePhoneDoesNotExists.executeValidation(userDomain.getCellPhoneNumber(), daoFactory);
+		
+		
 		var userEntity = UserEntityAssembler.getUserEntityAssembler().toEntity(userDomain);
 		
-		userEntity.setId(id);
+		userEntity.setId(generateId());
 		
 		daoFactory.getUserDAO().create(userEntity);
 		
 	}
 	
-	private void validateUserData (final UserDomain userDomain) {
-		if(ObjectHelper.isNull(userDomain)) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_NULL_USER.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_NULL_USER.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
+	private UUID generateId() {
+		var id = UUIDHelper.getUUIDHelper().generateNewUUID();
+		var userEntity = daoFactory.getUserDAO().findById(id);
+		while (!UUIDHelper.getUUIDHelper().isDefaultUUID(userEntity.getId())) {
+			id = UUIDHelper.getUUIDHelper().generateNewUUID();
+			userEntity = daoFactory.getUserDAO().findById(id);
 		}
 		
-		if(ObjectHelper.isNull(userDomain.getIdentificationType())) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_NULL_IDENTIFICATION_TYPE.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_NULL_IDENTIFICATION_TYPE.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		if(ObjectHelper.isNull(userDomain.getResidenceCity())) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_NULL_CITY.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_NULL_CITY.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		if (TextHelper.isEmptyWithTrim(userDomain.getIdentificationNumber()) || 
-				userDomain.getIdentificationNumber().length() > 25) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_INVALID_IDENTIFICATION_NUMBER.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_IDENTIFICATION_NUMBER.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		if (TextHelper.isEmptyWithTrim(userDomain.getFirstName()) || 
-				userDomain.getFirstName().length() > 20) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_INVALID_FIRST_NAME.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_FIRST_NAME.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		if (TextHelper.isEmptyWithTrim(userDomain.getMiddleName()) || 
-				userDomain.getMiddleName().length() > 20) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_INVALID_MIDDLE_NAME.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_MIDDLE_NAME.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		if (TextHelper.isEmptyWithTrim(userDomain.getLastName()) || 
-				userDomain.getLastName().length() > 20) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_INVALID_LAST_NAME.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_lAST_NAME.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		if (TextHelper.isEmptyWithTrim(userDomain.getSecondLastName()) || 
-				userDomain.getSecondLastName().length() > 20) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_INVALID_SECOND_LAST_NAME.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_SECOND_lAST_NAME.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		if (!TextHelper.isValidEmail(userDomain.getEmail()) || 
-				userDomain.getEmail().length() > 250) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_INVALID_EMAIL.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_EMAIL.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		if (!TextHelper.isValidPhoneNumber(userDomain.getCellPhoneNumber()) || 
-				userDomain.getCellPhoneNumber().length() > 20) {
-			var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_INVALID_CELL_PHONE_NUMBER.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_INVALID_CELL_PHONE_NUMBER.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-		}
-		
-		
+		return id;
 	}
 	
-	private void validateDuplicatedUser(final UserDomain userDomain) {
-
-	    var userEntityFilter = UserEntityAssembler.getUserEntityAssembler().toEntity(userDomain);
-
-
-	    var userDAO = daoFactory.getUserDAO();
-
-	    var filterByIdentification = new UserEntity();
-	    filterByIdentification.setIdentificationType(userEntityFilter.getIdentificationType());
-	    filterByIdentification.setIdentificationNumber(userEntityFilter.getIdentificationNumber());
-
-	    var existingById = userDAO.findByFilter(filterByIdentification);
-	    if (!existingById.isEmpty()) {
-	    	var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_DUPLICATED_IDENTIFICATION.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_IDENTIFICATION.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-	    }
-
-	    var filterByEmail = new UserEntity();
-	    filterByEmail.setEmail(userEntityFilter.getEmail());
-
-	    var existingByEmail = userDAO.findByFilter(filterByEmail);
-	    if (!existingByEmail.isEmpty()) {
-	    	var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_DUPLICATED_EMAIL.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_EMAIL.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-	    }
-
-	    var filterByPhone = new UserEntity();
-	    filterByPhone.setCellPhoneNumber(userEntityFilter.getCellPhoneNumber());
-
-	    var existingByPhone = userDAO.findByFilter(filterByPhone);
-	    if (!existingByPhone.isEmpty()) {
-	    	var userMessage = MessagesEnum.USER_ERROR_WHILE_REGISTERING_USER_DUPLICATED_CELL_PHONE_NUMBER.getContent();
-			var technicalMessage = MessagesEnum.TECHNICAL_ERROR_WHILE_REGISTERING_USER_DUPLICATED_CELL_PHONE_NUMBER.getContent();
-			throw NoseException.create(userMessage, technicalMessage);
-	    }
-	}
-
+	
 
 
 	@Override
@@ -172,7 +77,6 @@ public final class UserBusinessImpl implements UserBusiness {
 		
 		daoFactory.getUserDAO().findById(id);
 		
-		validateUserData(userDomain);
 		
 		validateDuplicatedUserOnUpdate(id, userDomain);
 		
@@ -236,7 +140,7 @@ public final class UserBusinessImpl implements UserBusiness {
 	}
 
 	@Override
-	public List<UserDomain> findUserByFilter(UserDomain userFilters) {
+	public List<UserDomain> findUserByFilter(final UserDomain userFilters) {
 		
 		var userFiltersEntity = UserEntityAssembler.getUserEntityAssembler().toEntity(userFilters);
 		

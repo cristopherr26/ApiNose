@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.edu.uco.nose.business.facade.impl.UserFacadeImpl;
 import co.edu.uco.nose.controller.dto.Response;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
+import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.dto.UserDto;
 
 @RestController
@@ -33,7 +34,7 @@ public class UserController {
 	try {
 		var facade = new UserFacadeImpl();
 		responseObjectData.setData(facade.findAllUsers());
-		responseObjectData.addMessage("All users filtered succesfully");
+		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_FOUND.getContent());
 		
 		
 	} catch (final NoseException exception) {
@@ -42,7 +43,7 @@ public class UserController {
 		responseStatusCode = HttpStatus.BAD_REQUEST;
 		exception.printStackTrace();
 	} catch( Exception exception) {
-		var userMessage = "Unexpected error";
+		var userMessage = MessagesEnum.USER_ERROR_TRYING_TO_MAKE_AN_OPERATION.getContent();
 		responseObjectData = Response.createFailedResponse();
 		responseObjectData.addMessage(userMessage);
 		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -63,7 +64,7 @@ public class UserController {
 	try {
 		var facade = new UserFacadeImpl();
 		facade.registerNewUserInformation(user);
-		responseObjectData.addMessage(" User registered sucesfully");
+		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_REGISTERED.getContent());
 		
 		
 	} catch (final NoseException exception) {
@@ -72,7 +73,7 @@ public class UserController {
 		responseStatusCode = HttpStatus.BAD_REQUEST;
 		exception.printStackTrace();
 	} catch( Exception exception) {
-		var userMessage = "Unexpected error";
+		var userMessage = MessagesEnum.USER_ERROR_TRYING_TO_MAKE_AN_OPERATION.getContent();
 		responseObjectData = Response.createFailedResponse();
 		responseObjectData.addMessage(userMessage);
 		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -92,7 +93,7 @@ public class UserController {
 	try {
 		var facade = new UserFacadeImpl();
 		facade.updateUserInformation(id, user);
-		responseObjectData.addMessage(" User updated sucesfully");
+		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_UPDATED.getContent());
 		
 		
 	} catch (final NoseException exception) {
@@ -101,7 +102,7 @@ public class UserController {
 		responseStatusCode = HttpStatus.BAD_REQUEST;
 		exception.printStackTrace();
 	} catch( Exception exception) {
-		var userMessage = "Unexpected error";
+		var userMessage = MessagesEnum.USER_ERROR_TRYING_TO_MAKE_AN_OPERATION.getContent();
 		responseObjectData = Response.createFailedResponse();
 		responseObjectData.addMessage(userMessage);
 		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -121,7 +122,7 @@ public class UserController {
 	try {
 		var facade = new UserFacadeImpl();
 		facade.dropUserInformation(id);
-		responseObjectData.addMessage(" User deleted sucesfully");
+		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_DELETED.getContent());
 		
 		
 	} catch (final NoseException exception) {
@@ -130,7 +131,7 @@ public class UserController {
 		responseStatusCode = HttpStatus.BAD_REQUEST;
 		exception.printStackTrace();
 	} catch( Exception exception) {
-		var userMessage = "Unexpected error";
+		var userMessage = MessagesEnum.USER_ERROR_TRYING_TO_MAKE_AN_OPERATION.getContent();
 		responseObjectData = Response.createFailedResponse();
 		responseObjectData.addMessage(userMessage);
 		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -150,7 +151,7 @@ public class UserController {
 	try {
 		var facade = new UserFacadeImpl();
 		responseObjectData.setData(List.of(facade.findUserById(id)));
-		responseObjectData.addMessage("User filtered succesfully");
+		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_FOUND.getContent());
 		
 		
 	} catch (final NoseException exception) {
@@ -159,7 +160,7 @@ public class UserController {
 		responseStatusCode = HttpStatus.BAD_REQUEST;
 		exception.printStackTrace();
 	} catch( Exception exception) {
-		var userMessage = "Unexpected error";
+		var userMessage = MessagesEnum.USER_ERROR_TRYING_TO_MAKE_AN_OPERATION.getContent();
 		responseObjectData = Response.createFailedResponse();
 		responseObjectData.addMessage(userMessage);
 		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -179,7 +180,7 @@ public class UserController {
 	try {
 		var facade = new UserFacadeImpl();
 		responseObjectData.setData(facade.findUserByFilter(userFilters));
-		responseObjectData.addMessage("Users filtered succesfully");
+		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_FOUND.getContent());
 		
 		
 	} catch (final NoseException exception) {
@@ -188,7 +189,7 @@ public class UserController {
 		responseStatusCode = HttpStatus.BAD_REQUEST;
 		exception.printStackTrace();
 	} catch( Exception exception) {
-		var userMessage = "Unexpected error";
+		var userMessage = MessagesEnum.USER_ERROR_TRYING_TO_MAKE_AN_OPERATION.getContent();
 		responseObjectData = Response.createFailedResponse();
 		responseObjectData.addMessage(userMessage);
 		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;

@@ -75,7 +75,7 @@ public final class CityPostgreSqlDAO extends SqlConnection implements CityDAO {
 		sql.append("INNER JOIN \"Departamento\" AS d ");
 		sql.append("  ON c.\"departamento\" = d.\"id\" ");
 		sql.append("INNER JOIN \"Pais\" AS p ");
-		sql.append("  ON d.\"pais\" = p.\"id\";");
+		sql.append("  ON d.\"pais\" = p.\"id\" ");
 
 
 	    
