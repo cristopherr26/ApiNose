@@ -7,6 +7,7 @@ import co.edu.uco.nose.business.assembler.entity.impl.UserEntityAssembler;
 import co.edu.uco.nose.business.business.UserBusiness;
 import co.edu.uco.nose.business.business.validator.city.ValidateCityExistsById;
 import co.edu.uco.nose.business.business.validator.identificationtype.ValidateIdTypeExistsById;
+import co.edu.uco.nose.business.business.validator.user.ValidateDataUserConsistencyForFilter;
 import co.edu.uco.nose.business.business.validator.user.ValidateDataUserConsistencyForRegisterNewInformation;
 import co.edu.uco.nose.business.business.validator.user.ValidateUserDoesNotExistsWithSameTypeAndNumber;
 import co.edu.uco.nose.business.business.validator.user.ValidateUserEmailDoesNotExists;
@@ -141,6 +142,8 @@ public final class UserBusinessImpl implements UserBusiness {
 
 	@Override
 	public List<UserDomain> findUserByFilter(final UserDomain userFilters) {
+		
+		ValidateDataUserConsistencyForFilter.executeValidation(userFilters);
 		
 		var userFiltersEntity = UserEntityAssembler.getUserEntityAssembler().toEntity(userFilters);
 		

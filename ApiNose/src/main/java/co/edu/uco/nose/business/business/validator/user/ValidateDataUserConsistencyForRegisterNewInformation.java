@@ -64,20 +64,20 @@ public final class ValidateDataUserConsistencyForRegisterNewInformation implemen
 	private void validateDataLength(final UserDomain data) {
 		
 		StringLengthValueIsValidRule.executeRule(data.getIdentificationNumber(), "Número de identificación", 1, 50, true);
-		StringLengthValueIsValidRule.executeRule(data.getFirstName(), "Primer Nombre", 1, 100, true);
-		StringLengthValueIsValidRule.executeRule(data.getLastName(), "Primer Apellido", 1, 100, true);
+		StringLengthValueIsValidRule.executeRule(data.getFirstName(), "Primer nombre", 1, 100, true);
+		StringLengthValueIsValidRule.executeRule(data.getLastName(), "Primer apellido", 1, 100, true);
 		StringLengthValueIsValidRule.executeRule(data.getEmail(), "Correo electrónico", 1, 100, true);
 		StringLengthValueIsValidRule.executeRule(data.getCellPhoneNumber(), "Número de celular", 1, 15, true);
 		
 		
 		if(!TextHelper.isEmptyWithTrim(data.getMiddleName())){
 			
-			StringLengthValueIsValidRule.executeRule(data.getMiddleName(), "Segundo Nombre", 1, 100, true);
+			StringLengthValueIsValidRule.executeRule(data.getMiddleName(), "Segundo nombre", 1, 100, true);
 		}
 		
 		if(!TextHelper.isEmptyWithTrim(data.getSecondLastName())){
 			
-			StringLengthValueIsValidRule.executeRule(data.getSecondLastName(), "Segundo Apellido", 1, 100, true);
+			StringLengthValueIsValidRule.executeRule(data.getSecondLastName(), "Segundo apellido", 1, 100, true);
 		}
 
 	}
@@ -93,12 +93,12 @@ public final class ValidateDataUserConsistencyForRegisterNewInformation implemen
 		
 		if(!TextHelper.isEmptyWithTrim(data.getMiddleName())){
 			
-			StringFormatValueIsValidRule.executeRule(data.getMiddleName(), "Segundo Nombre", "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+$", true);
+			StringFormatValueIsValidRule.executeRule(data.getMiddleName(), "Segundo nombre", "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+$", true);
 		}
 		
 		if(!TextHelper.isEmptyWithTrim(data.getSecondLastName())){
 			
-			StringFormatValueIsValidRule.executeRule(data.getSecondLastName(), "Segundo Apellido", "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+$", true );
+			StringFormatValueIsValidRule.executeRule(data.getSecondLastName(), "Segundo apellido", "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+$", true );
 		}
 	}
 
