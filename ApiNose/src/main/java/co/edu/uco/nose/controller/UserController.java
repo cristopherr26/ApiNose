@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.uco.nose.business.facade.impl.UserFacadeImpl;
@@ -25,34 +26,6 @@ import co.edu.uco.nose.dto.UserDto;
 @RequestMapping("/api/v1/users")
 public class UserController {
 	
-	@GetMapping
-	public ResponseEntity<Response<UserDto>> findAllUsers () {
-		
-		Response<UserDto> responseObjectData = Response.createSuccededResponse();
-		HttpStatusCode responseStatusCode = HttpStatus.OK;
-		
-	try {
-		var facade = new UserFacadeImpl();
-		responseObjectData.setData(facade.findAllUsers());
-		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_FOUND.getContent());
-		
-		
-	} catch (final NoseException exception) {
-		responseObjectData = Response.createFailedResponse();
-		responseObjectData.addMessage(exception.getUserMessage());
-		responseStatusCode = HttpStatus.BAD_REQUEST;
-		exception.printStackTrace();
-	} catch( Exception exception) {
-		var userMessage = MessagesEnum.USER_ERROR_TRYING_TO_MAKE_AN_OPERATION.getContent();
-		responseObjectData = Response.createFailedResponse();
-		responseObjectData.addMessage(userMessage);
-		responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-		exception.printStackTrace();
-	}
-		
-		return new ResponseEntity<>(responseObjectData, responseStatusCode);
-		
-	}
 	
 	@PostMapping
 	public  ResponseEntity<Response<UserDto>> registerNewUserInformation (@RequestBody UserDto user) {
@@ -171,13 +144,30 @@ public class UserController {
 		
 	}
 	
-	@PostMapping("/{filter}")
-	public ResponseEntity<Response<UserDto>> findUserByFilter (@RequestBody UserDto userFilters) {
+	@GetMapping
+	public ResponseEntity<Response<UserDto>> findUserByFilter (
+			@RequestParam(name = "identification-number", required = false) String identificationNumber,
+			@RequestParam(name = "first-name", required = false) String firstName,
+			@RequestParam(name = "middle-name", required = false) String middleName,
+			@RequestParam(name = "last-name", required = false) String lastName,
+			@RequestParam(name = "second-last-name", required = false) String secondLastname,
+			@RequestParam(name = "email", required = false) String email,
+			@RequestParam(name = "phone-number", required = false) String cellPhoneNumber){
+		
 		
 		Response<UserDto> responseObjectData = Response.createSuccededResponse();
 		HttpStatusCode responseStatusCode = HttpStatus.OK;
 		
 	try {
+		var userFilters = new UserDto();
+		userFilters.setIdentificationNumber(identificationNumber);
+		userFilters.setFirstName(firstName);
+		userFilters.setMiddleName(middleName);
+		userFilters.setLastName(secondLastname);
+		userFilters.setSecondLastName(secondLastname);
+		userFilters.setEmail(email);
+		userFilters.setCellPhoneNumber(cellPhoneNumber);
+
 		var facade = new UserFacadeImpl();
 		responseObjectData.setData(facade.findUserByFilter(userFilters));
 		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_FOUND.getContent());
