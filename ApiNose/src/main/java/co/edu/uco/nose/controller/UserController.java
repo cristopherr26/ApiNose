@@ -143,7 +143,7 @@ public class UserController {
 		return new ResponseEntity<>(responseObjectData, responseStatusCode);
 		
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<Response<UserDto>> findUserByFilter (
 			@RequestParam(name = "identification-number", required = false) String identificationNumber,
@@ -152,7 +152,9 @@ public class UserController {
 			@RequestParam(name = "last-name", required = false) String lastName,
 			@RequestParam(name = "second-last-name", required = false) String secondLastname,
 			@RequestParam(name = "email", required = false) String email,
-			@RequestParam(name = "phone-number", required = false) String cellPhoneNumber){
+			@RequestParam(name = "phone-number", required = false) String cellPhoneNumber,
+			@RequestParam(name = "email-confirmed", required = false) boolean emailConfirmed,
+			@RequestParam(name = "phone-number-confirmed", required = false) boolean phoneNumberConfirmed){
 		
 		
 		Response<UserDto> responseObjectData = Response.createSuccededResponse();
@@ -163,11 +165,13 @@ public class UserController {
 		userFilters.setIdentificationNumber(identificationNumber);
 		userFilters.setFirstName(firstName);
 		userFilters.setMiddleName(middleName);
-		userFilters.setLastName(secondLastname);
+		userFilters.setLastName(lastName);
 		userFilters.setSecondLastName(secondLastname);
 		userFilters.setEmail(email);
 		userFilters.setCellPhoneNumber(cellPhoneNumber);
-
+		userFilters.setEmailConfirmed(emailConfirmed);
+		userFilters.setCellPhoneNumberConfirmed(phoneNumberConfirmed);
+		
 		var facade = new UserFacadeImpl();
 		responseObjectData.setData(facade.findUserByFilter(userFilters));
 		responseObjectData.addMessage(MessagesEnum.USER_SUCESSFULLY_FOUND.getContent());

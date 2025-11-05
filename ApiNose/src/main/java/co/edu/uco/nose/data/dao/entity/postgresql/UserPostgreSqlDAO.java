@@ -186,7 +186,12 @@ public final class UserPostgreSqlDAO extends SqlConnection implements UserDAO {
 			sql.append(" WHERE ");
 			sql.append(String.join(" AND ", conditions));
 		}
-	}
+		
+		 System.out.println("=== QUERY FINAL ===");
+		    System.out.println(sql);
+		    System.out.println("Parametros: " + parametersList);
+		}
+	
 
 	private void addCondition(final List<String> conditions, final List<Object> parametersList, final boolean condition,
 			final String clause, final Object value) {
